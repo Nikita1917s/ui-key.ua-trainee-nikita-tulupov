@@ -1,4 +1,4 @@
-# trello_nikita_ui
+# nikita_ui
 
 ## Project setup
 ```
