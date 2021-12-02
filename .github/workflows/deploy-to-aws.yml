@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI
+name: CI/Deploy to AWS
 
 # Controls when the workflow will run
 on:
@@ -30,8 +30,8 @@ jobs:
 
       - name: nmp install & npm build
         run: |
-          npm install,
-          npm run build.
+          npm install
+          npm run build
 
       - name: S3 Sync
         uses: jakejarvis/s3-sync-action@v0.5.1
