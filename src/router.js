@@ -10,7 +10,9 @@ export default new Router({
         {
             path: '/',
             redirect: '/trello-page',
+            name: 'trello-page',
             component: Home
+            
         },
         {
             component: Home,
