@@ -1,7 +1,9 @@
 <template>
   <div>
     <Header v-bind:loggedIn="loggedIn" v-on:signInOut="loggedIn = !loggedIn" />
-    <div class="body-block"></div>
+    <div class="body-block">
+      <router-view />
+    </div>
   </div>
 </template>
 
