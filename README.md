@@ -1,6 +1,6 @@
 # nikita_ui
 
-## Project setup.
+## Project setup
 ```
 npm install
 ```
