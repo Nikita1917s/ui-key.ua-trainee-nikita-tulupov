@@ -2,6 +2,10 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import vuetify from './plugins/vuetify'
+import 'es6-promise/auto'
+import store from './store/store'
+
+
 //BootstrapVue
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 // Import Bootstrap an BootstrapVue CSS files (order is important)
@@ -18,5 +22,6 @@ Vue.config.productionTip = false
 new Vue({
   vuetify,
   router,
+  store, 
   render: h => h(App)
 }).$mount('#app')
