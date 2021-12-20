@@ -1,7 +1,10 @@
 <template>
-  <header>
+  <header class="topHeader">
     <b-navbar toggleable="lg" type="dark" variant="info">
       <b-navbar-brand href="#" class="h1-text">Trello Nikita</b-navbar-brand>
+
+      <!-- Create column button -->
+      <CreateColunm />
 
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav class="ml-auto">
@@ -29,15 +32,19 @@
     </b-navbar>
   </header>
 </template>
+
 <script>
+import CreateColunm from "./Column/CreateColumn.vue";
+
 export default {
   name: "Header",
+  components: { CreateColunm },
   props: ["loggedIn"],
 };
 </script>
 
 <style>
-header {
+.topHeader {
   width: 100%;
   top: 0;
   position: fixed;
@@ -46,7 +53,7 @@ header {
 .h1-text {
   font-size: 32px !important;
 }
-header .navbar {
+.topHeader .navbar {
   padding: 0 1rem;
 }
 .userName-header {
@@ -56,6 +63,6 @@ header .navbar {
 }
 </style>
 
-// Create header with:
-// - buttons "Sign in" or "Logout" when you are already signed in.
-// - place in the corner with the name of assigned user and icon of this user
+// Create header with: // - buttons "Sign in" or "Logout" when you are already
+signed in. // - place in the corner with the name of assigned user and icon of
+this user
