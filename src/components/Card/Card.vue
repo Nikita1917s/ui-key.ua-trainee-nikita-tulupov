@@ -1,5 +1,5 @@
 <template>
-  <a href="#" class="card">
+  <a class="card">
     <div class="cardWrap">
       <div class="cardInner">
         <div class="cardTag">
@@ -8,25 +8,30 @@
         <div class="editCard" title="Edit card">
           <b-icon icon="pencil"></b-icon>
         </div>
-        <h4>{{ CardName }}</h4>
-        <div>
-          <b-icon icon="text-left" aria-hidden="true"></b-icon>
-        </div>
+        <CardDetailed
+          :cardId="cardId"
+          :columnId="columnId"
+          :columnName="columnName"
+          :cardName="cardName"
+          :cardDescription="cardDescription"
+        />
       </div>
     </div>
   </a>
 </template>
 
 <script>
+import CardDetailed from "./CardDetailed.vue";
 export default {
   name: "Card",
-  props: ["columnId", "CardName", "CardDescription"],
+  components: { CardDetailed },
+  props: ["columnName", "columnId", "cardName", "cardDescription", "cardId"],
 };
 </script>
 
 <style lang="scss">
 .card {
-  margin: 0 0 10px ;
+  margin: 0 0 10px;
 }
 .cardWrap {
   box-sizing: border-box;

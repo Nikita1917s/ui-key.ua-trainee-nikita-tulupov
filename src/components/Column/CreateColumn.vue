@@ -31,6 +31,8 @@
 
 <script>
 import { mapMutations } from "vuex";
+import { v4 as uuid_v4 } from "uuid";
+
 export default {
   name: "CreateColumn",
 
@@ -60,9 +62,11 @@ export default {
 
         //Create new Column
         this.addColumns({
-          columnId: Date.now(),
+          columnId: uuid_v4(),
           columnName: this.columnName,
-          cards: []
+          cards: [],
+          actionFunc: "addColumn",
+          remove: false,
         });
 
         this.resetInput();

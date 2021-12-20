@@ -11,9 +11,11 @@
         <Card
           v-for="card in cards"
           :key="card.cardId"
-          :columnId="columnId.columnId"
-          :CardName="card.cardName"
-          :CardDescription="card.cardDescription"
+          :cardId="card.cardId"
+          :columnId="columnId"
+          :columnName="columnName"
+          :cardName="card.cardName"
+          :cardDescription="card.cardDescription"
         />
       </div>
       <div>
@@ -27,7 +29,6 @@
 import CreateCard from "../Card/CreateCard.vue";
 import Card from "../Card/Card.vue";
 import { mapGetters } from "vuex";
-
 
 export default {
   name: "Column",
@@ -54,7 +55,7 @@ export default {
 .column-content h3 {
   margin: 0;
 }
-.column-cardsList{
+.column-cardsList {
   overflow-y: auto;
   max-height: 52.5vh;
 }
