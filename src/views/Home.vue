@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="home">
     <!-- <h2>Home page with CI/CD - AWS Pipeline</h2> -->
     <Dashboard />
   </div>

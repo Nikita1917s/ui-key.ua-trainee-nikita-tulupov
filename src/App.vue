@@ -33,7 +33,7 @@ export default {
 ::-webkit-scrollbar {
   background-color: rgba(255, 195, 139, 0.75);
   height: 10px;
-  width: 10px;
+  width: 5px;
 }
 
 ::-webkit-scrollbar-track {
@@ -42,7 +42,6 @@ export default {
 
 ::-webkit-scrollbar-thumb {
   background-color: rgba(112, 122, 144, 0.75);
-  outline: 1px solid rgb(112, 122, 144);
   border-radius: 15px;
 }
 </style>

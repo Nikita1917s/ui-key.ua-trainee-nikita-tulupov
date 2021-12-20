@@ -1,23 +1,36 @@
 export default {
-    actions: {},
+    actions: {
+        functionCard(context, payload) {
+            let storage = [...payload.data];
+            let searchID = ((data, id) => data?.findIndex((elem) => elem.columnId === id))
+            let column = searchID(storage, payload.columnId)
+            let card = searchID(storage, storage[column].cardId)
+
+            //Check if cart exists 
+            if (card === -1) {
+                storage[column].cards = [...storage[column].cards, { cardId: payload.cardId, cardName: payload.cardName, cardDescription: payload.cardDescription }]
+            }
+            context.commit('updateColumn', storage)
+        }
+
+
+    },
     mutations: {
-        updateColumns(state, columns) {
-            state.columns = [...columns, 1]
+        updateColumn(state, storage) {
+            state.columns = (storage)
         },
+
         addColumns(state, newColumns) {
             state.columns.push(newColumns)
         },
+
     },
     state: {
-        columns: [{ id: 1, name: 'first' }, { id: 2, name: 'second' },],
-        cards: []
+        columns: [{ columnId: 1, columnName: 'First', cards: [] }, { columnId: 2, columnName: 'Second', cards: [] },],
     },
     getters: {
         allColumns(state) {
             return state.columns
-        },
-        allCards(state) {
-            return state.cards
         }
     }
 }

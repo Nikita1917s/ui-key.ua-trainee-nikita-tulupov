@@ -1,27 +1,39 @@
 <template>
-  <div class="column-wrap" v-on:click="$emit('func', id)">
+  <div class="column-wrap">
     <div class="column-content">
       <div class="column-header">
         <div></div>
-        <h3 class="column-name">{{ name }}</h3>
-        <h6 class="column-cardsNumber">Cards: {{ cardsNumber }}</h6>
+        <h3 class="column-name">{{ columnName }}</h3>
+        <h6 class="column-cardsNumber">Cards: {{ cards.length }}</h6>
         <!-- <textarea name="" id="" rows="2"></textarea> -->
       </div>
-      <div class="column-cardsList"></div>
+      <div class="column-cardsList">
+        <Card
+          v-for="card in cards"
+          :key="card.cardId"
+          :columnId="columnId.columnId"
+          :CardName="card.cardName"
+          :CardDescription="card.cardDescription"
+        />
+      </div>
       <div>
-        <button>
-          <span>+</span>
-          <span>Add a card</span>
-        </button>
+        <CreateCard :columnId="columnId" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import CreateCard from "../Card/CreateCard.vue";
+import Card from "../Card/Card.vue";
+import { mapGetters } from "vuex";
+
+
 export default {
   name: "Column",
-  props: ["id", "name", "cardsNumber"],
+  props: ["columnId", "columnName", "cards"],
+  components: { CreateCard, Card },
+  computed: mapGetters(["allColumns"]),
 };
 </script>
 
@@ -41,5 +53,9 @@ export default {
 }
 .column-content h3 {
   margin: 0;
+}
+.column-cardsList{
+  overflow-y: auto;
+  max-height: 52.5vh;
 }
 </style>

@@ -1,6 +1,8 @@
 <template>
   <div>
-    <b-button @click="modalShow = !modalShow">Create column</b-button>
+    <b-button @click="(modalShow = !modalShow), resetInput()"
+      >Create column</b-button
+    >
     <b-modal v-model="modalShow" @shown="focusMyElement">
       <template #modal-header>
         <h5>Create new column</h5>
@@ -16,7 +18,7 @@
       />
       <template #modal-footer="{ ok, cancel }">
         <!-- Emulate built in modal footer ok and cancel button actions -->
-        <b-button size="sm" variant="primary" @click="ok(), submitFunc()">
+        <b-button size="sm" variant="primary" @click="submitFunc(ok)">
           Create column
         </b-button>
         <b-button size="sm" variant="secondary" @click="cancel()"
@@ -31,21 +33,43 @@
 import { mapMutations } from "vuex";
 export default {
   name: "CreateColumn",
+
+  //Data from input
   data() {
     return {
       modalShow: false,
-      columnName: ''
+      columnName: "",
     };
   },
   methods: {
-    ...mapMutations(["addColumns"]),
-    submitFunc() {
-      this.addColumns({
-        id: Date.now(),
-        name: this.columnName,
-      });
-      this.columnName = '';
+    //Reset input after modal window closed
+    resetInput() {
+      if (this.modalShow) {
+        this.columnName = "";
+      }
     },
+
+    //Get addColumn func
+    ...mapMutations(["addColumns"]),
+
+    submitFunc(ok) {
+      // Add a column if input field.value.length > 0
+      if (this.columnName) {
+        //Close modal
+        ok();
+
+        //Create new Column
+        this.addColumns({
+          columnId: Date.now(),
+          columnName: this.columnName,
+          cards: []
+        });
+
+        this.resetInput();
+      }
+    },
+
+    //Auto focus on open
     focusMyElement() {
       this.$refs.focusThis.focus();
     },
