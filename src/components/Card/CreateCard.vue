@@ -33,6 +33,7 @@
 
 <script>
 import { mapMutations, mapActions, mapGetters } from "vuex";
+import { v4 as uuid_v4 } from "uuid";
 
 export default {
   name: "CreateCard",
@@ -59,10 +60,12 @@ export default {
         this.functionCard({
           data: this.allColumns,
           columnId: this.columnId,
-          cardId: Date.now(),
+          cardId: uuid_v4(),
           cardName: this.cardName,
           cardDescription: "",
-        })
+          remove: false,
+          actionFunc: "addCard",
+        });
       }
     },
   },
@@ -84,6 +87,7 @@ export default {
   width: 100%;
   display: flex;
   justify-content: space-between;
+  margin: 5px 0 0;
 }
 .createCardInput textarea {
   overflow: hidden;
