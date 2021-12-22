@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard">
     <h2>Dashboard</h2>
-    <h4>Number of columns: {{ allColumns.length }}</h4>
+    <h4>Number of columns: {{ allColumns.length}}</h4>
     <div class="dashboard-list">
       <Column
         v-for="columns in allColumns"
@@ -16,14 +16,11 @@
 
 <script>
 import Column from "./Column/Column.vue";
-import { mapGetters, mapActions } from "vuex";
-//mapMutations
+import { mapGetters } from "vuex";
+
 export default {
   components: { Column },
   name: "Dashboard",
-  methods: {
-    ...mapActions([]),
-  },
   computed: mapGetters(["allColumns", "allCards"]),
 };
 </script>
