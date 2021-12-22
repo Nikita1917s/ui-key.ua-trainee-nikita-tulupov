@@ -28,7 +28,6 @@ export default {
             let removeItem = (() => {
                 if (payload.actionWith === 'column') {
                     console.log(payload.columnName, 'remove')
-
                 }
                 else if (payload.actionWith === 'card') {
                     console.log()

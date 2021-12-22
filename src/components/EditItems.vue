@@ -3,6 +3,7 @@
     <template v-if="edit">
       <div class="editItemInput">
         <textarea
+        title="Press to edit"
           placeholder="Enter a new name…"
           v-model="itemNameDetailed"
           autofocus
@@ -24,7 +25,7 @@
 
     <template v-else>
       <button @click="editFunc(), setInput()" class="editItemBtn">
-        <h3>{{ columnName }}</h3>
+        <h3>{{ columnName || cardName }}</h3>
       </button>
     </template>
   </div>
@@ -35,7 +36,14 @@ import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "EditItem",
-  props: ["columnId", "columnName", "actionWith", "actionType"],
+  props: [
+    "columnId",
+    "columnName",
+    "cardId",
+    "cardName",
+    "actionWith",
+    "actionType",
+  ],
 
   //Data from input
   data() {
@@ -61,16 +69,16 @@ export default {
       this.updateStorage({
         data: this.allColumns,
         columnId: this.columnId || "",
-        columnName: this.itemNameDetailed || "",
+        columnName: this.columnName ? this.itemNameDetailed : "",
         cardId: this.cardId || "",
-        cardName: this.cardName || "",
+        cardName:  this.cardName ? this.itemNameDetailed : "",
         actionWith: this.actionWith,
         actionType: this.actionType,
       });
     },
 
     setInput() {
-      this.itemNameDetailed = this.columnName;
+      this.itemNameDetailed = this.columnName || this.cardName;
     },
     //Auto focus on open
     focusMyElement() {
@@ -85,6 +93,7 @@ export default {
 <style lang="scss">
 .editItem {
   margin: 10px 0 5px;
+  width: 100%;
 }
 .editItemBtn,
 .editItemInput {
@@ -104,9 +113,9 @@ export default {
   resize: none;
   height: 54px;
   width: 100%;
-  background: white;
   padding: 6px 8px 2px;
   border-radius: 3px;
+  background-color: #ebecf0;
 }
 .editItemBtn:hover,
 .editItemdBtn:active {
