@@ -34,13 +34,13 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import { v4 as uuid_v4 } from "uuid";
-
+import constants from "../../modules/constants";
 export default {
   name: "CreateCard",
   props: ["columnId"],
   data: () => ({
     cardName: "",
-
+    constants: constants,
     //Show/Hide card name input field
     cardInputShow: false,
   }),
@@ -62,8 +62,8 @@ export default {
           cardName: this.cardName,
           cardDescription: "",
           remove: false,
-          actionWith: "card",
-          actionType: "add",
+        actionWith: constants.actionWith.card,
+        actionType: constants.actionType.add,
         });
       }
     },

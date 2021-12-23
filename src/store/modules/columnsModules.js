@@ -27,10 +27,10 @@ export default {
 
             let removeItem = (() => {
                 if (payload.actionWith === 'column') {
-                    console.log(payload.columnName, 'remove')
+                    storage.splice(column, 1)
                 }
                 else if (payload.actionWith === 'card') {
-                    console.log()
+                    storage[column].cards.splice(card, 1)
                 }
             })
 
@@ -49,7 +49,6 @@ export default {
 
             context.commit('updateColumn', storage)
         }
-
 
     },
     mutations: {

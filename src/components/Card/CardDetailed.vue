@@ -64,6 +64,9 @@
       </div>
 
       <template #modal-footer="{ cancel }">
+        <b-button size="sm" variant="danger" @click="removeFunc()">
+          Remove card
+        </b-button>
         <b-button size="sm" variant="primary" @click="submitFunc()">
           Save card
         </b-button>
@@ -113,7 +116,17 @@ export default {
         cardDescription: this.cardDescriptionDetailed,
         actionWith: "card",
         actionType: "edit",
-        remove: false,
+      });
+    },
+
+    removeFunc() {
+      //delete card
+      this.updateStorage({
+        data: this.allColumns,
+        columnId: this.columnId,
+        cardId: this.cardId,
+        actionWith: "card",
+        actionType: "remove",
       });
     },
 
@@ -152,17 +165,18 @@ export default {
   margin: 0 0 10px;
 }
 .cardModalIcon {
-  width: 5%;
+  width: 7.5%;
   text-align: center;
 }
 .cardModalHeader {
-  width: 95%;
+  width: 92.5%;
   display: flex;
   flex-wrap: wrap;
 }
 .cardModalHeader textarea {
   resize: none;
-  min-height: 40vh;
+  max-height: 40vh;
+  min-height: 10vh;
   overflow: auto;
 }
 </style>

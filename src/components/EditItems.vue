@@ -3,7 +3,7 @@
     <template v-if="edit">
       <div class="editItemInput">
         <textarea
-        title="Press to edit"
+          title="Press to edit"
           placeholder="Enter a new name…"
           v-model="itemNameDetailed"
           autofocus
@@ -60,7 +60,6 @@ export default {
 
     //Close block
     editFunc() {
-      //console.log(this.itemNameDetailed)
       this.edit = !this.edit;
     },
 
@@ -71,7 +70,7 @@ export default {
         columnId: this.columnId || "",
         columnName: this.columnName ? this.itemNameDetailed : "",
         cardId: this.cardId || "",
-        cardName:  this.cardName ? this.itemNameDetailed : "",
+        cardName: this.cardName ? this.itemNameDetailed : "",
         actionWith: this.actionWith,
         actionType: this.actionType,
       });
@@ -111,12 +110,17 @@ export default {
   overflow: hidden;
   overflow-wrap: break-word;
   resize: none;
-  height: 54px;
+  min-height: 10px;
+  max-height: 54px;
   width: 100%;
   padding: 6px 8px 2px;
   border-radius: 3px;
   background-color: #ebecf0;
 }
+.column-header .editItemInput textarea {
+  background-color: #fff;
+}
+
 .editItemBtn:hover,
 .editItemdBtn:active {
   background: #091e4221;
