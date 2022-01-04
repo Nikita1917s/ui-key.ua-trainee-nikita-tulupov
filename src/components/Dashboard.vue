@@ -2,26 +2,46 @@
   <div class="dashboard">
     <h2>Dashboard</h2>
     <h4>Number of columns: {{ allColumns.length }}</h4>
-    <div class="dashboard-list">
-      <Column
-        v-for="columns in allColumns"
-        :key="columns.columnId"
-        :columnId="columns.columnId"
-        :columnName="columns.columnName"
-        :cards="columns.cards"
-      />
+    <div>
+      <draggable @end="itemMove()" :list="this.allColumns" group="columns" class="dashboard-list">
+        <Column
+          v-for="columns in allColumns"
+          :key="columns.columnId"
+          :columnId="columns.columnId"
+          :columnName="columns.columnName"
+          :cards="columns.cards"
+        />
+      </draggable>
     </div>
   </div>
 </template>
 
 <script>
 import Column from "./Column/Column.vue";
-import { mapGetters } from "vuex";
+import constants from "../modules/constants";
+import draggable from "vuedraggable";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
-  components: { Column },
+  components: { Column, draggable },
   name: "Dashboard",
   computed: mapGetters(["allColumns", "allCards"]),
+  data() {
+    return {
+      constants: constants,
+    };
+  },
+  methods: {
+    ...mapActions(["updateStorage"]),
+    itemMove() {
+      this.updateStorage({
+        data: this.allColumns,
+        columnId: this.columnId,
+        actionWith: constants.actionWith.column,
+        actionType: constants.actionType.move,
+      });
+    },
+  },
 };
 </script>
 

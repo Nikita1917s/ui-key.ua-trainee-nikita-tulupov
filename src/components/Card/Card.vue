@@ -1,5 +1,5 @@
 <template>
-  <a class="card">
+  <a class="card" cardId="cardID">
     <div class="cardWrap">
       <div class="cardInner">
         <div class="cardTag">

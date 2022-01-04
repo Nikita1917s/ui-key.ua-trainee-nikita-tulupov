@@ -34,17 +34,30 @@ export default {
                 }
             })
 
-            //Add card
+            let moveItem = (() => {
+                if (payload.actionWith === 'column') {
+                    console.log('moved', storage)
+                }
+                else if (payload.actionWith === 'card') {
+                    console.log('moved', storage[column].cards)
+                }
+            })
+
+            //Add item
             if (payload.actionType === 'add') {
                 addItem()
             }
-            //Edit card
+            //Edit item
             else if (payload.actionType === 'edit') {
                 editItem()
             }
-            //Remove card
+            //Remove item
             else if (payload.actionType === 'remove') {
                 removeItem()
+            }
+            //Move item
+            else if (payload.actionType === 'move') {
+                moveItem()
             }
 
             context.commit('updateColumn', storage)
@@ -62,7 +75,7 @@ export default {
 
     },
     state: {
-        columns: [{ columnId: 1, columnName: 'First', cards: [] }, { columnId: 2, columnName: 'Second', cards: [] },],
+        columns: [{ columnId: 1, columnName: 'First', cards: [{ columnId: 1, cardId: 1, cardName: 'Card 1', cardDescription: 'Des' }, { columnId: 1, cardId: 2, cardName: 'Card 2', cardDescription: 'Des2' }] }, { columnId: 2, columnName: 'Second', cards: [] },],
     },
     getters: {
         allColumns(state) {

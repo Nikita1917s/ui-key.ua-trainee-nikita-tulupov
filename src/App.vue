@@ -25,7 +25,7 @@ export default {
 
 <style lang="scss">
 .body-block {
-  padding: 56px 1rem 10px;
+  padding: 56px 0 10px 1rem;
   background-image: url("https://trello-backgrounds.s3.amazonaws.com/SharedBackground/2048x1152/154693945019a4593db450f8db58bb38/photo-1637083215354-9a4509587173.jpg");
   height: 100vh;
   background-position: center;

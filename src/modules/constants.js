@@ -7,7 +7,8 @@ const constants = {
     actionType: {
         add: 'add',
         edit: 'edit',
-        remove: 'remove'
+        remove: 'remove',
+        move: 'move'
     }
 }
 
