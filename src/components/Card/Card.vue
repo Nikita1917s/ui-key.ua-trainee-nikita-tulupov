@@ -6,7 +6,38 @@
           <span></span>
         </div>
         <div class="editCard" title="Edit card">
-          <b-icon icon="pencil"></b-icon>
+          <b-icon icon="pencil" @click="editFunc(), setInput()"></b-icon>
+        </div>
+        <div div class="editItem">
+          <template v-if="edit">
+            <div class="editItemInput">
+              <textarea
+                title="Press to edit"
+                placeholder="Enter a new name…"
+                v-model="itemNameDetailed"
+                autofocus
+              ></textarea>
+              <div class="editItemInputBtn">
+                <b-button
+                  size="sm"
+                  variant="primary"
+                  @click="submitFunc(), editFunc()"
+                >
+                  Save
+                </b-button>
+                <b-button size="sm" variant="secondary" @click="editFunc()"
+                  >Cancel</b-button
+                >
+              </div>
+            </div>
+          </template>
+
+          <template v-else>
+            <!-- <button
+              @click="editFunc(), setInput()"
+              class="editItemBtn"
+            ></button> -->
+          </template>
         </div>
         <CardDetailed
           :cardId="cardId"
@@ -22,10 +53,54 @@
 
 <script>
 import CardDetailed from "./CardDetailed.vue";
+//import EditItems from "../EditItems.vue";
+import constants from "../../modules/constants";
+import { mapActions, mapGetters } from "vuex";
+
 export default {
   name: "Card",
   components: { CardDetailed },
   props: ["columnName", "columnId", "cardName", "cardDescription", "cardId"],
+  data() {
+    return {
+      edit: false,
+      constants: constants,
+    };
+  },
+  computed: mapGetters(["allColumns"]),
+
+  methods: {
+    ...mapActions(["updateStorage"]),
+
+    //Close block
+    editFunc() {
+      //console.log(this.itemNameDetailed)
+      this.edit = !this.edit;
+    },
+
+    submitFunc() {
+      //Change item
+      this.updateStorage({
+        data: this.allColumns,
+        columnId: this.columnId || "",
+        columnName: this.columnName ? this.itemNameDetailed : "",
+        cardId: this.cardId || "",
+        cardName: this.cardName ? this.itemNameDetailed : "",
+        actionWith: constants.actionWith.card,
+        actionType: constants.actionType.edit,
+      });
+    },
+
+    setInput() {
+      this.itemNameDetailed = this.cardName;
+    },
+    //Auto focus on open
+    focusMyElement() {
+      if (this.edit) {
+        this.$refs.focusThis.focus();
+      }
+    },
+  },
 };
 </script>
 
@@ -43,6 +118,10 @@ export default {
   color: #172b4d;
   text-decoration: none;
   border-radius: 3px;
+}
+
+.cardInner .editItem {
+  margin: 0;
 }
 .cardWrap:hover {
   background-color: #f4f5f7;

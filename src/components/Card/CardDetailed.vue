@@ -18,7 +18,13 @@
             <b-icon icon="layout-text-window"></b-icon>
           </div>
           <div class="cardModalHeader">
-            <h4>{{ cardName }}</h4>
+            <EditItems
+              :columnId="columnId"
+              :cardId="cardId"
+              :cardName="cardName"
+              :actionWith="constants.actionWith.card"
+              :actionType="constants.actionType.edit"
+            />
             <h6>In column: {{ columnName }}</h6>
           </div>
         </div>
@@ -30,15 +36,19 @@
         </div>
         <div class="cardModalHeader">
           <h5>Description</h5>
-          <b-button size="sm" variant="secondary" @click="editFunc()"
-            >Edit</b-button
-          >
+          <b-button size="sm" variant="secondary" @click="editFunc()">{{
+            !this.edit ? "Edit" : "Close Edit"
+          }}</b-button>
         </div>
       </div>
       <div class="cardModal">
         <div class="cardModalIcon"></div>
         <div class="cardModalHeader">
-          <p>{{ this.cardDescription }}</p>
+          <p>
+            {{
+              this.cardDescription || "Press Edit button to add descpription"
+            }}
+          </p>
 
           <template v-if="this.edit">
             <textarea
@@ -67,17 +77,20 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import EditItems from "../EditItems.vue";
+import constants from "../../modules/constants";
 
 export default {
   name: "CardDetailed",
   props: ["columnName", "columnId", "cardId", "cardName", "cardDescription"],
-
+  components: { EditItems },
   //Data from input
   data() {
     return {
       modalShow: false,
       edit: false,
       cardDescriptionDetailed: "",
+      constants: constants,
     };
   },
   computed: mapGetters(["allColumns"]),
