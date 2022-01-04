@@ -30,11 +30,13 @@
 </template>
 
 <script>
-import { mapMutations } from "vuex";
 import { v4 as uuid_v4 } from "uuid";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "CreateColumn",
+  props: ["actionWith", "actionType"],
+  computed: mapGetters(["allColumns"]),
 
   //Data from input
   data() {
@@ -52,7 +54,7 @@ export default {
     },
 
     //Get addColumn func
-    ...mapMutations(["addColumns"]),
+    ...mapActions(["updateStorage"]),
 
     submitFunc(ok) {
       // Add a column if input field.value.length > 0
@@ -61,12 +63,13 @@ export default {
         ok();
 
         //Create new Column
-        this.addColumns({
+        this.updateStorage({
+          data: this.allColumns,
           columnId: uuid_v4(),
           columnName: this.columnName,
           cards: [],
-          actionFunc: "addColumn",
-          remove: false,
+          actionWith: this.actionWith,
+          actionType: this.actionType,
         });
 
         this.resetInput();

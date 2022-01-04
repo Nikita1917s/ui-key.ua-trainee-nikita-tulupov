@@ -32,15 +32,17 @@ export default {
 <style lang="scss">
 .card {
   margin: 0 0 10px;
+  border-radius: 3px;
 }
 .cardWrap {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  background-color: #eaf0ff;
+  background-color: #fff;
   color: #172b4d;
   text-decoration: none;
+  border-radius: 3px;
 }
 .cardWrap:hover {
   background-color: #f4f5f7;

@@ -1,6 +1,6 @@
 <template>
   <div class="cardDetailed" title="Open card">
-    <div @click="(modalShow = !modalShow), resetInput()">
+    <div @click="(modalShow = !modalShow), setInput()">
       <h4>{{ cardName }}</h4>
       <div>
         <b-icon icon="text-left" aria-hidden="true"></b-icon>
@@ -53,9 +53,9 @@
         </div>
       </div>
 
-      <template #modal-footer="{ ok, cancel }">
-        <b-button size="sm" variant="primary" @click="submitFunc(ok)">
-          Create column
+      <template #modal-footer="{ cancel }">
+        <b-button size="sm" variant="primary" @click="submitFunc()">
+          Save card
         </b-button>
         <b-button size="sm" variant="secondary" @click="cancel()"
           >Close</b-button
@@ -83,31 +83,28 @@ export default {
   computed: mapGetters(["allColumns"]),
 
   methods: {
-    ...mapActions(["functionCard"]),
+    ...mapActions(["updateStorage"]),
 
-    //Reset input after modal window closed
+    //Close block
     editFunc() {
       this.edit = !this.edit;
     },
 
-    submitFunc(ok) {
-      //Close modal
-      ok();
-
+    submitFunc() {
       //Create new Column
-      this.functionCard({
+      this.updateStorage({
         data: this.allColumns,
         columnId: this.columnId,
         cardId: this.cardId,
         cardName: this.cardName,
         cardDescription: this.cardDescriptionDetailed,
+        actionWith: "card",
+        actionType: "edit",
         remove: false,
-        actionFunc: "editCard",
       });
-      this.edit = false;
     },
-    
-    resetInput() {
+
+    setInput() {
       this.cardDescriptionDetailed = this.cardDescription;
     },
     //Auto focus on open

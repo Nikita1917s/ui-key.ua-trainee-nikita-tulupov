@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { mapMutations, mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import { v4 as uuid_v4 } from "uuid";
 
 export default {
@@ -47,9 +47,7 @@ export default {
   computed: mapGetters(["allColumns", "allCards"]),
 
   methods: {
-    //Get addColumn func
-    ...mapMutations(["addCard"]),
-    ...mapActions(["functionCard"]),
+    ...mapActions(["updateStorage"]),
     showInput() {
       this.cardInputShow = !this.cardInputShow;
       this.cardName = "";
@@ -57,14 +55,15 @@ export default {
     submitFunc() {
       // Add a column if input field.value.length > 0
       if (this.cardName) {
-        this.functionCard({
+        this.updateStorage({
           data: this.allColumns,
           columnId: this.columnId,
           cardId: uuid_v4(),
           cardName: this.cardName,
           cardDescription: "",
           remove: false,
-          actionFunc: "addCard",
+          actionWith: "card",
+          actionType: "add",
         });
       }
     },

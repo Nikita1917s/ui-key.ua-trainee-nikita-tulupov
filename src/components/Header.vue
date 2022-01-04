@@ -4,7 +4,10 @@
       <b-navbar-brand href="#" class="h1-text">Trello Nikita</b-navbar-brand>
 
       <!-- Create column button -->
-      <CreateColunm />
+      <CreateColunm
+        :actionWith="constants.actionWith.column"
+        :actionType="constants.actionType.add"
+      />
 
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav class="ml-auto">
@@ -35,11 +38,15 @@
 
 <script>
 import CreateColunm from "./Column/CreateColumn.vue";
+import constants from "../modules/constants";
 
 export default {
   name: "Header",
   components: { CreateColunm },
   props: ["loggedIn"],
+  data: () => ({
+    constants: constants,
+  }),
 };
 </script>
 
