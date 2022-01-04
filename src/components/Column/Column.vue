@@ -2,12 +2,18 @@
   <div class="column-wrap">
     <div class="column-content">
       <div class="column-header">
-        <EditItems
-          :columnId="columnId"
-          :columnName="columnName"
-          :actionWith="constants.actionWith.column"
-          :actionType="constants.actionType.edit"
-        />
+        <div class="column-header-inner">
+          <EditItems
+            :columnId="columnId"
+            :columnName="columnName"
+            :actionWith="constants.actionWith.column"
+            :actionType="constants.actionType.edit"
+          />
+        </div>
+        <div class="editCard" title="Edit card" @click="removeFunc()">
+          <b-icon icon="trash"></b-icon>
+        </div>
+
         <h6 class="column-cardsNumber">Cards: {{ cards.length }}</h6>
       </div>
       <div class="column-cardsList">
@@ -34,18 +40,31 @@ import CreateCard from "../Card/CreateCard.vue";
 import Card from "../Card/Card.vue";
 import constants from "../../modules/constants";
 
-
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "Column",
   props: ["columnId", "columnName", "cards"],
   components: { CreateCard, Card, EditItems },
   computed: mapGetters(["allColumns"]),
+
   data() {
     return {
       constants: constants,
     };
+  },
+  methods: {
+    ...mapActions(["updateStorage"]),
+
+    removeFunc() {
+      //delete card
+      this.updateStorage({
+        data: this.allColumns,
+        columnId: this.columnId,
+        actionWith: constants.actionWith.column,
+        actionType: constants.actionType.remove,
+      });
+    },
   },
 };
 </script>
@@ -63,6 +82,13 @@ export default {
   background-color: #ebecf0;
   padding: 0px 8px 10px;
   border-radius: 3px;
+}
+.column-header {
+  display: flex;
+  flex-wrap: wrap;
+}
+.column-header-inner {
+  width: 85%;
 }
 .column-content h3 {
   margin: 0;

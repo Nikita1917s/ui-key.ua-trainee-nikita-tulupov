@@ -18,7 +18,6 @@
                 <em class="userName-header">User Name</em>
               </template>
 
-              <!-- <b-dropdown-item href="#">Profile</b-dropdown-item> -->
               <b-dropdown-item
                 href="#"
                 v-on:click="$emit('signInOut', loggedIn)"

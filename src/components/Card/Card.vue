@@ -5,7 +5,7 @@
         <div class="cardTag">
           <span></span>
         </div>
-        <div class="editCard" title="Edit card">
+        <div class="editCard" title="Remove card">
           <b-icon icon="pencil" @click="editFunc(), setInput()"></b-icon>
         </div>
         <div div class="editItem">
@@ -31,13 +31,6 @@
               </div>
             </div>
           </template>
-
-          <template v-else>
-            <!-- <button
-              @click="editFunc(), setInput()"
-              class="editItemBtn"
-            ></button> -->
-          </template>
         </div>
         <CardDetailed
           :cardId="cardId"
@@ -53,7 +46,6 @@
 
 <script>
 import CardDetailed from "./CardDetailed.vue";
-//import EditItems from "../EditItems.vue";
 import constants from "../../modules/constants";
 import { mapActions, mapGetters } from "vuex";
 
@@ -157,8 +149,13 @@ export default {
 .editCard {
   width: 15%;
   text-align: center;
+  vertical-align: middle;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: gray;
   border-radius: 5px;
+  cursor: pointer;
 }
 .editCard:hover {
   color: #172b4d;

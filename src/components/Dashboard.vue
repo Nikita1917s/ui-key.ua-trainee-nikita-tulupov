@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard">
     <h2>Dashboard</h2>
-    <h4>Number of columns: {{ allColumns.length}}</h4>
+    <h4>Number of columns: {{ allColumns.length }}</h4>
     <div class="dashboard-list">
       <Column
         v-for="columns in allColumns"
