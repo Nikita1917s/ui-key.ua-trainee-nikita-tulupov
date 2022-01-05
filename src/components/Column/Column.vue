@@ -17,15 +17,17 @@
         <h6 class="column-cardsNumber">Cards: {{ cards.length }}</h6>
       </div>
       <div class="column-cardsList">
-        <Card
-          v-for="card in cards"
-          :key="card.cardId"
-          :cardId="card.cardId"
-          :columnId="columnId"
-          :columnName="columnName"
-          :cardName="card.cardName"
-          :cardDescription="card.cardDescription"
-        />
+        <draggable @end="itemMove()" :list="cards" group="cards">
+          <Card
+            v-for="card in cards"
+            :key="card.cardId"
+            :cardId="card.cardId"
+            :columnId="columnId"
+            :columnName="columnName"
+            :cardName="card.cardName"
+            :cardDescription="card.cardDescription"
+          />
+        </draggable>
       </div>
       <div>
         <CreateCard :columnId="columnId" />
@@ -39,15 +41,16 @@ import EditItems from "../EditItems.vue";
 import CreateCard from "../Card/CreateCard.vue";
 import Card from "../Card/Card.vue";
 import constants from "../../modules/constants";
-
+import draggable from "vuedraggable";
 import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "Column",
   props: ["columnId", "columnName", "cards"],
-  components: { CreateCard, Card, EditItems },
-  computed: mapGetters(["allColumns"]),
-
+  components: { CreateCard, Card, EditItems, draggable },
+  computed: {
+    ...mapGetters(["allColumns"]),
+  },
   data() {
     return {
       constants: constants,
@@ -55,7 +58,15 @@ export default {
   },
   methods: {
     ...mapActions(["updateStorage"]),
-
+    itemMove() {
+      this.updateStorage({
+        data: this.allColumns,
+        columnId: this.columnId,
+        cards: this.cards,
+        actionWith: constants.actionWith.card,
+        actionType: constants.actionType.move,
+      });
+    },
     removeFunc() {
       //delete card
       this.updateStorage({

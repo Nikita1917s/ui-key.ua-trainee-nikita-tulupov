@@ -62,8 +62,8 @@ export default {
           cardName: this.cardName,
           cardDescription: "",
           remove: false,
-        actionWith: constants.actionWith.card,
-        actionType: constants.actionType.add,
+          actionWith: constants.actionWith.card,
+          actionType: constants.actionType.add,
         });
       }
     },

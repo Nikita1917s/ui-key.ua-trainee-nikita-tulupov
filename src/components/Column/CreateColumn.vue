@@ -17,7 +17,6 @@
         v-model="columnName"
       />
       <template #modal-footer="{ ok, cancel }">
-        <!-- Emulate built in modal footer ok and cancel button actions -->
         <b-button size="sm" variant="primary" @click="submitFunc(ok)">
           Create column
         </b-button>
