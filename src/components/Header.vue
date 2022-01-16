@@ -3,11 +3,18 @@
     <b-navbar toggleable="lg" type="dark" variant="info">
       <b-navbar-brand href="#" class="h1-text">Trello Nikita</b-navbar-brand>
 
+      <!-- Create dashboard button -->
+      <CreateDashboard
+        :actionWith="constants.actionWith.dashboard"
+        :actionType="constants.actionType.add"
+      />
+
       <!-- Create column button -->
-      <CreateColunm
+      <CreateColunm v-if="getDashboardId"
         :actionWith="constants.actionWith.column"
         :actionType="constants.actionType.add"
       />
+      <b-navbar-brand v-else class="h2-text">Please create a Dashboard first</b-navbar-brand>
 
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav class="ml-auto">
@@ -36,12 +43,15 @@
 </template>
 
 <script>
+import CreateDashboard from "./Dashboard/CreateDashboard.vue";
 import CreateColunm from "./Column/CreateColumn.vue";
 import constants from "../modules/constants";
+import { mapGetters } from "vuex";
 
 export default {
   name: "Header",
-  components: { CreateColunm },
+  components: { CreateDashboard, CreateColunm },
+  computed: mapGetters(["getDashboardId"]),
   props: ["loggedIn"],
   data: () => ({
     constants: constants,

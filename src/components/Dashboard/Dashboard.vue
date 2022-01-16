@@ -1,9 +1,27 @@
 <template>
   <div class="dashboard">
-    <h2>Dashboard</h2>
-    <h4>Number of columns: {{ allColumns.length }}</h4>
+    <template v-if="getDashboardName">
+      <h2 >Dashboard name: {{ getDashboardName }}</h2>
+      <h4>Number of columns: {{ allColumns.length }}</h4>
+    </template>
+
+    <Loader v-else-if="!getDashboardName" />
+    <template v-else>
+      <h2>Create a new Dashboard</h2>
+      <CreateDashboard
+        :show="true"
+        :actionWith="constants.actionWith.dashboard"
+        :actionType="constants.actionType.add"
+      />
+    </template>
+
     <div>
-      <draggable @end="itemMove()" :list="this.allColumns" group="columns" class="dashboard-list">
+      <draggable
+        @end="itemMove()"
+        :list="this.allColumns"
+        group="columns"
+        class="dashboard-list"
+      >
         <Column
           v-for="columns in allColumns"
           :key="columns.columnId"
@@ -17,15 +35,17 @@
 </template>
 
 <script>
-import Column from "./Column/Column.vue";
-import constants from "../modules/constants";
+import Column from "../Column/Column.vue";
+import constants from "../../modules/constants";
 import draggable from "vuedraggable";
 import { mapActions, mapGetters } from "vuex";
+import CreateDashboard from "./CreateDashboard.vue";
+import Loader from "../Loader.vue";
 
 export default {
-  components: { Column, draggable },
+  components: { CreateDashboard, Column, draggable, Loader },
   name: "Dashboard",
-  computed: mapGetters(["allColumns", "allCards"]),
+  computed: mapGetters(["allColumns", "getDashboardName"]),
   data() {
     return {
       constants: constants,
