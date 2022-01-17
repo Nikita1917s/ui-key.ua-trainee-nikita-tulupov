@@ -1,27 +1,27 @@
 import axios from 'axios';
 import constants from "../../modules/constants";
+
 export default {
     actions: {
         updateStorage(context, payload) {
             let storage = context.state.columns;
-            let searchID = ((data, id, type) => data?.findIndex((elem) => elem[type] === id));
+            let searchID = ((data, id, keyType) => data?.findIndex((elem) => elem[keyType] === id));
             let column = searchID(storage, payload.columnId, 'columnId');
             let card = (payload.cardId) ? searchID(storage[column].cards, payload.cardId, 'cardId') : '';
+            let capitalizeLetter = ((capitalizeName) => capitalizeName = capitalizeName[0].toUpperCase() + capitalizeName.slice(1));
 
             let addItem = (() => {
-                if (payload.actionWith === 'column') {
-                    payload.columnName = payload.columnName[0].toUpperCase() + payload.columnName.slice(1);
-                    storage = [...storage, { columnId: payload.columnId, columnName: payload.columnName, cards: [] }];
+                if (payload.actionWith === constants.actionWith.column) {
+                    storage = [...storage, { columnId: payload.columnId, columnName: capitalizeLetter(payload.columnName), cards: [] }];
                 }
-                else if (card === -1 && payload.actionWith === 'card') {
-                    payload.cardName = payload.cardName[0].toUpperCase() + payload.cardName.slice(1);
-                    storage[column].cards = [...storage[column].cards, { cardId: payload.cardId, cardName: payload.cardName, cardDescription: payload.cardDescription }];
-                } else if (payload.actionWith === 'dashboard') {
+                else if (card === -1 && payload.actionWith === constants.actionWith.card) {
+                    storage[column].cards = [...storage[column].cards, { cardId: payload.cardId, cardName: capitalizeLetter(payload.cardName), cardDescription: payload.cardDescription }];
+                }
+                else if (payload.actionWith === constants.actionWith.dashboard) {
                     try {
-                        payload.dashboardName = payload.dashboardName[0].toUpperCase() + payload.dashboardName.slice(1);
                         const params = {
                             dashboardId: payload.dashboardId,
-                            dashboardName: payload.dashboardName,
+                            dashboardName: capitalizeLetter(payload.dashboardName),
                             columns: []
                         };
 
@@ -32,11 +32,11 @@ export default {
 
                         context.commit('updateDashboard', {
                             dashboardId: localStore,
-                            dashboardName: payload.dashboardName
+                            dashboardName: capitalizeLetter(payload.dashboardName)
                         });
                         context.commit('updateDashboardList', [...context.state.dashboardList, {
                             dashboardId: payload.dashboardId,
-                            dashboardName: payload.dashboardName,
+                            dashboardName: capitalizeLetter(payload.dashboardName),
                             columns: []
                         }]);
                     } catch (err) {
@@ -46,17 +46,17 @@ export default {
             });
 
             let editItem = (() => {
-                if (payload.actionWith === 'column') {
+                if (payload.actionWith === constants.actionWith.column) {
                     storage[column].columnName = payload.columnName;
                 }
-                else if (payload.actionWith === 'card') {
+                else if (payload.actionWith === constants.actionWith.card) {
                     storage[column].cards[card].cardDescription = payload.cardDescription;
                     storage[column].cards[card].cardName = payload.cardName;
                 }
             })
 
             let removeItem = (() => {
-                if (payload.actionWith === 'column') {
+                if (payload.actionWith === constants.actionWith.column) {
                     storage.splice(column, 1);
                 }
                 else if (payload.actionWith === 'card') {
@@ -65,24 +65,24 @@ export default {
             })
 
             let moveItem = (() => {
-                if (payload.actionWith === 'column') {
+                if (payload.actionWith === constants.actionWith.column) {
                     console.log('moved', storage);
                 }
-                else if (payload.actionWith === 'card') {
+                else if (payload.actionWith === constants.actionWith.card) {
                     console.log('moved', storage[column].cards);
                 }
             });
 
-            if (payload.actionType === 'add') {
+            if (payload.actionType === constants.actionType.add) {
                 addItem();
             }
-            else if (payload.actionType === 'edit') {
+            else if (payload.actionType === constants.actionType.edit) {
                 editItem();
             }
-            else if (payload.actionType === 'remove') {
+            else if (payload.actionType === constants.actionType.remove) {
                 removeItem();
             }
-            else if (payload.actionType === 'move') {
+            else if (payload.actionType === constants.actionType.move) {
                 moveItem();
             }
 
@@ -97,7 +97,7 @@ export default {
 
             if (dashboard.length) {
                 let localStore = (localStorage.getItem('dashboardId')) ? localStorage.getItem('dashboardId') : '';
-                let searchID = ((data, id, type) => data?.findIndex((elem) => elem[type] === id));
+                let searchID = ((data, id, keyType) => data?.findIndex((elem) => elem[keyType] === id));
                 let dashboardIndex = searchID(dashboard, localStore, 'dashboardId');
                 (dashboardIndex === -1) && (dashboardIndex = dashboard.length - 1);
 
@@ -133,13 +133,13 @@ export default {
         allColumns(state) {
             return state.columns;
         },
-        getDashboardId(state) {
+        dashboardId(state) {
             return state.dashboardId;
         },
-        getDashboardName(state) {
+        dashboardName(state) {
             return state.dashboardName;
         },
-        getDashboardList(state) {
+        dashboardList(state) {
             return state.dashboardList;
         }
     }

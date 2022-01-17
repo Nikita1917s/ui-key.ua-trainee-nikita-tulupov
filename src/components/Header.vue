@@ -10,7 +10,7 @@
       />
 
       <!-- Create column button -->
-      <CreateColunm v-if="getDashboardId"
+      <CreateColunm v-if="dashboardId"
         :actionWith="constants.actionWith.column"
         :actionType="constants.actionType.add"
       />
@@ -51,7 +51,7 @@ import { mapGetters } from "vuex";
 export default {
   name: "Header",
   components: { CreateDashboard, CreateColunm },
-  computed: mapGetters(["getDashboardId"]),
+  computed: mapGetters(["dashboardId"]),
   props: ["loggedIn"],
   data: () => ({
     constants: constants,
