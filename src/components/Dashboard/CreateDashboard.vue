@@ -8,12 +8,12 @@
         <h5>Dashboards</h5>
       </template>
 
-      <!-- <div class="dashboardList">
+      <div class="dashboardList">
         <ul>
           <li>2</li>
           <li>3</li>
         </ul>
-      </div> -->
+      </div>
 
       <input
         class="modalInput"
@@ -51,13 +51,13 @@ export default {
       dashboardName: "",
     };
   },
+
   methods: {
     resetInput() {
       if (this.modalShow) {
         this.dashboardName = "";
       }
     },
-
     ...mapActions(["updateStorage"]),
 
     submit(ok) {
@@ -90,7 +90,6 @@ export default {
 .dashboardList ul {
   list-style: none;
 }
-
 .dashboardList ul li {
   cursor: pointer;
   border-radius: 3px;

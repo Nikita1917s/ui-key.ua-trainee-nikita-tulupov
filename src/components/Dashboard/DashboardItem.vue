@@ -1,5 +1,5 @@
 <template>
-  <li>3</li>
+  <li>{{dashboardName}}</li>
 </template>
 
 <script>
@@ -10,16 +10,18 @@ import { mapGetters } from "vuex";
 export default {
   name: "DashboardItem",
   components: { DashboardItem },
-  props: ["columnName", "columnId", "cardName", "cardDescription", "cardId"],
+  props: ["dashboardName", "dashboardId"],
   data() {
     return {
       edit: false,
-      constants: constants,
+      constants: constants
     };
   },
-  computed: mapGetters(["allDashboards"]),
+  computed: mapGetters(["dashboardList"]),
 
-  methods: {},
+  methods: {
+
+  },
 };
 </script>
 

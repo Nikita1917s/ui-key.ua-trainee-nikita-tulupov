@@ -1,11 +1,11 @@
 <template>
   <div class="dashboard">
-    <template v-if="getDashboardName">
-      <h2>Dashboard name: {{ getDashboardName }}</h2>
+    <template v-if="dashboardName">
+      <h2>Dashboard name: {{ dashboardName }}</h2>
       <h4>Number of columns: {{ allColumns.length }}</h4>
     </template>
 
-    <template v-if="!getDashboardName && !this.loading">
+    <template v-if="!dashboardName && !this.loading">
       <h2>Create a new Dashboard</h2>
       <CreateDashboard
         :show="true"
@@ -14,7 +14,7 @@
       />
     </template>
 
-    <Loader v-if="!getDashboardName && this.loading" />
+    <Loader v-if="!dashboardName && this.loading" />
 
     <div>
       <draggable
@@ -46,7 +46,7 @@ import Loader from "../Loader.vue";
 export default {
   components: { CreateDashboard, Column, draggable, Loader },
   name: "Dashboard",
-  computed: mapGetters(["allColumns", "getDashboardName"]),
+  computed: mapGetters(["allColumns", "dashboardName"]),
   data() {
     return {
       constants: constants,
@@ -62,7 +62,7 @@ export default {
       this.updateStorage({
         columnId: this.columnId,
         actionWith: constants.actionWith.column,
-        actionType: constants.actionType.move,
+        actionType: constants.actionType.move
       });
     },
     loaded() {
