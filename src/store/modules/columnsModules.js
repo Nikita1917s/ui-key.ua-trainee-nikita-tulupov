@@ -32,11 +32,11 @@ export default {
 
                         context.commit('updateDashboard', {
                             dashboardId: localStore,
-                            dashboardName: payload.dashboardName
+                            dashboardName: capitalizeLetter(payload.dashboardName)
                         });
                         context.commit('updateDashboardList', [...context.state.dashboardList, {
                             dashboardId: payload.dashboardId,
-                            dashboardName: payload.dashboardName,
+                            dashboardName: capitalizeLetter(payload.dashboardName),
                             columns: []
                         }]);
                     } catch (err) {
