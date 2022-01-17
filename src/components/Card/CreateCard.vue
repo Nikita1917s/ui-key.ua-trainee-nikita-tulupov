@@ -32,9 +32,10 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapActions } from "vuex";
 import { v4 as uuid_v4 } from "uuid";
 import constants from "../../modules/constants";
+
 export default {
   name: "CreateCard",
   props: ["columnId"],
@@ -44,7 +45,6 @@ export default {
     //Show/Hide card name input field
     cardInputShow: false,
   }),
-  computed: mapGetters(["allColumns", "allCards"]),
 
   methods: {
     ...mapActions(["updateStorage"]),
@@ -53,10 +53,8 @@ export default {
       this.cardName = "";
     },
     submitFunc() {
-      // Add a column if input field.value.length > 0
       if (this.cardName) {
         this.updateStorage({
-          data: this.allColumns,
           columnId: this.columnId,
           cardId: uuid_v4(),
           cardName: this.cardName,

@@ -3,7 +3,7 @@ import constants from "../../modules/constants";
 export default {
     actions: {
         updateStorage(context, payload) {
-            let storage = payload.data;
+            let storage = context.state.columns;
             let searchID = ((data, id, type) => data?.findIndex((elem) => elem[type] === id));
             let column = searchID(storage, payload.columnId, 'columnId');
             let card = (payload.cardId) ? searchID(storage[column].cards, payload.cardId, 'cardId') : '';
@@ -24,11 +24,14 @@ export default {
                             dashboardName: payload.dashboardName,
                             columns: []
                         };
+
                         axios.post(`${constants.api.invokeUrl}/dashboardPut`, params);
                         storage = [];
+                        let localStore = (localStorage.getItem('dashboardId')) ? localStorage.getItem('dashboardId') : '';
+                        localStorage.setItem('dashboardId', payload.dashboardId)
 
                         context.commit('updateDashboard', {
-                            dashboardId: payload.dashboardId,
+                            dashboardId: localStore,
                             dashboardName: payload.dashboardName
                         });
                         context.commit('updateDashboardList', [...context.state.dashboardList, {
@@ -93,9 +96,10 @@ export default {
             const dashboard = await res.json();
 
             if (dashboard.length) {
+                let localStore = (localStorage.getItem('dashboardId')) ? localStorage.getItem('dashboardId') : '';
                 let searchID = ((data, id, type) => data?.findIndex((elem) => elem[type] === id));
-                let dashboardIndex = searchID(dashboard, state.dashboardId, 'dashboardId');
-                dashboardIndex = dashboardIndex === -1 && dashboard.length - 1;
+                let dashboardIndex = searchID(dashboard, localStore, 'dashboardId');
+                (dashboardIndex === -1) && (dashboardIndex = dashboard.length - 1);
 
                 state.commit('updateColumn', dashboard[dashboardIndex].columns);
                 state.commit('updateDashboard', dashboard[dashboardIndex]);

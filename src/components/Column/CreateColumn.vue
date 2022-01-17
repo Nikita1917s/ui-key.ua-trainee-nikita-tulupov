@@ -30,12 +30,11 @@
 
 <script>
 import { v4 as uuid_v4 } from "uuid";
-import { mapActions, mapGetters } from "vuex";
+import { mapActions } from "vuex";
 
 export default {
   name: "CreateColumn",
   props: ["actionWith", "actionType"],
-  computed: mapGetters(["allColumns"]),
 
   //Data from input
   data() {
@@ -45,25 +44,19 @@ export default {
     };
   },
   methods: {
-    //Reset input after modal window closed
     resetInput() {
       if (this.modalShow) {
         this.columnName = "";
       }
     },
-
-    //Get addColumn func
     ...mapActions(["updateStorage"]),
 
     submitFunc(ok) {
-      // Add a column if input field.value.length > 0
       if (this.columnName) {
-        //Close modal
         ok();
 
         //Create new Column
         this.updateStorage({
-          data: this.allColumns,
           columnId: uuid_v4(),
           columnName: this.columnName,
           cards: [],
@@ -75,7 +68,6 @@ export default {
       }
     },
 
-    //Auto focus on open
     focusMyElement() {
       this.$refs.focusThis.focus();
     },

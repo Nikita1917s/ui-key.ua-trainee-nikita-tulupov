@@ -79,7 +79,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapActions } from "vuex";
 import EditItems from "../EditItems.vue";
 import constants from "../../modules/constants";
 
@@ -96,20 +96,16 @@ export default {
       constants: constants,
     };
   },
-  computed: mapGetters(["allColumns"]),
 
   methods: {
     ...mapActions(["updateStorage"]),
 
-    //Close block
     editFunc() {
       this.edit = !this.edit;
     },
 
     submitFunc() {
-      //Create new Column
       this.updateStorage({
-        data: this.allColumns,
         columnId: this.columnId,
         cardId: this.cardId,
         cardName: this.cardName,
@@ -120,9 +116,7 @@ export default {
     },
 
     removeFunc() {
-      //delete card
       this.updateStorage({
-        data: this.allColumns,
         columnId: this.columnId,
         cardId: this.cardId,
         actionWith: "card",
@@ -133,7 +127,7 @@ export default {
     setInput() {
       this.cardDescriptionDetailed = this.cardDescription;
     },
-    //Auto focus on open
+
     focusMyElement() {
       if (this.edit) {
         this.$refs.focusThis.focus();

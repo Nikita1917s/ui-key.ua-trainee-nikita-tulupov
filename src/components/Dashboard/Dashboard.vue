@@ -55,7 +55,6 @@ export default {
     ...mapActions(["updateStorage"]),
     itemMove() {
       this.updateStorage({
-        data: this.allColumns,
         columnId: this.columnId,
         actionWith: constants.actionWith.column,
         actionType: constants.actionType.move,

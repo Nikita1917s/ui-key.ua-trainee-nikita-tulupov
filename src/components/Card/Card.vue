@@ -47,7 +47,7 @@
 <script>
 import CardDetailed from "./CardDetailed.vue";
 import constants from "../../modules/constants";
-import { mapActions, mapGetters } from "vuex";
+import { mapActions } from "vuex";
 
 export default {
   name: "Card",
@@ -59,21 +59,15 @@ export default {
       constants: constants,
     };
   },
-  computed: mapGetters(["allColumns"]),
-
   methods: {
     ...mapActions(["updateStorage"]),
 
-    //Close block
     editFunc() {
-      //console.log(this.itemNameDetailed)
       this.edit = !this.edit;
     },
 
     submitFunc() {
-      //Change item
       this.updateStorage({
-        data: this.allColumns,
         columnId: this.columnId || "",
         columnName: this.columnName ? this.itemNameDetailed : "",
         cardId: this.cardId || "",
@@ -86,7 +80,7 @@ export default {
     setInput() {
       this.itemNameDetailed = this.cardName;
     },
-    //Auto focus on open
+
     focusMyElement() {
       if (this.edit) {
         this.$refs.focusThis.focus();
@@ -111,7 +105,6 @@ export default {
   text-decoration: none;
   border-radius: 3px;
 }
-
 .cardInner .editItem {
   margin: 0;
 }
@@ -161,11 +154,9 @@ export default {
   color: #172b4d;
   background: rgb(182, 182, 182);
 }
-
 .cardInner h4 {
   width: 100%;
 }
-
 .column-content {
   border: 1px solid #eaf0ff;
   background-color: #ebecf0;

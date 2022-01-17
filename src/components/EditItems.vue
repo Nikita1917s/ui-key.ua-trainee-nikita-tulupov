@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapActions } from "vuex";
 
 export default {
   name: "EditItem",
@@ -53,8 +53,6 @@ export default {
       itemTextDetailed: "",
     };
   },
-  computed: mapGetters(["allColumns"]),
-
   methods: {
     ...mapActions(["updateStorage"]),
 
@@ -66,7 +64,6 @@ export default {
     submitFunc() {
       //Change item
       this.updateStorage({
-        data: this.allColumns,
         columnId: this.columnId || "",
         columnName: this.columnName ? this.itemNameDetailed : "",
         cardId: this.cardId || "",
@@ -79,7 +76,7 @@ export default {
     setInput() {
       this.itemNameDetailed = this.columnName || this.cardName;
     },
-    //Auto focus on open
+
     focusMyElement() {
       if (this.edit) {
         this.$refs.focusThis.focus();
