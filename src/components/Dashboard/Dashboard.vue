@@ -69,7 +69,7 @@ export default {
       setTimeout(() => {
         this.loading = false;
         return this.loading;
-      }, 1000);
+      }, 1500);
     },
   },
 };
