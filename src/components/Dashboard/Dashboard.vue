@@ -1,12 +1,11 @@
 <template>
   <div class="dashboard">
     <template v-if="getDashboardName">
-      <h2 >Dashboard name: {{ getDashboardName }}</h2>
+      <h2>Dashboard name: {{ getDashboardName }}</h2>
       <h4>Number of columns: {{ allColumns.length }}</h4>
     </template>
 
-    <Loader v-else-if="!getDashboardName" />
-    <template v-else>
+    <template v-if="!getDashboardName && !this.loading">
       <h2>Create a new Dashboard</h2>
       <CreateDashboard
         :show="true"
@@ -14,6 +13,8 @@
         :actionType="constants.actionType.add"
       />
     </template>
+
+    <Loader v-if="!getDashboardName && this.loading" />
 
     <div>
       <draggable
@@ -49,7 +50,11 @@ export default {
   data() {
     return {
       constants: constants,
+      loading: true,
     };
+  },
+  mounted() {
+    this.loaded();
   },
   methods: {
     ...mapActions(["updateStorage"]),
@@ -59,6 +64,12 @@ export default {
         actionWith: constants.actionWith.column,
         actionType: constants.actionType.move,
       });
+    },
+    loaded() {
+      setTimeout(() => {
+        this.loading = false;
+        return this.loading;
+      }, 1500);
     },
   },
 };
