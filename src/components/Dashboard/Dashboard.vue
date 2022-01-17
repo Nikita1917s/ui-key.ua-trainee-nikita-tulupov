@@ -54,7 +54,7 @@ export default {
     };
   },
   mounted() {
-    this.loaded()
+    this.loaded();
   },
   methods: {
     ...mapActions(["updateStorage"]),
@@ -66,10 +66,8 @@ export default {
       });
     },
     loaded() {
-      console.log(this.loading);
       setTimeout(() => {
         this.loading = false;
-        console.log(this.loading);
         return this.loading;
       }, 1000);
     },
