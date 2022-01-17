@@ -42,15 +42,12 @@ import CreateCard from "../Card/CreateCard.vue";
 import Card from "../Card/Card.vue";
 import constants from "../../modules/constants";
 import draggable from "vuedraggable";
-import { mapActions, mapGetters } from "vuex";
+import { mapActions } from "vuex";
 
 export default {
   name: "Column",
   props: ["columnId", "columnName", "cards"],
   components: { CreateCard, Card, EditItems, draggable },
-  computed: {
-    ...mapGetters(["allColumns"]),
-  },
   data() {
     return {
       constants: constants,
@@ -60,7 +57,6 @@ export default {
     ...mapActions(["updateStorage"]),
     itemMove() {
       this.updateStorage({
-        data: this.allColumns,
         columnId: this.columnId,
         cards: this.cards,
         actionWith: constants.actionWith.card,
@@ -68,9 +64,7 @@ export default {
       });
     },
     removeFunc() {
-      //delete card
       this.updateStorage({
-        data: this.allColumns,
         columnId: this.columnId,
         actionWith: constants.actionWith.column,
         actionType: constants.actionType.remove,

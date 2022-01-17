@@ -52,20 +52,16 @@ export default {
     };
   },
   methods: {
-    //Reset input after modal window closed
     resetInput() {
       if (this.modalShow) {
         this.dashboardName = "";
       }
     },
 
-    //Get addColumn func
     ...mapActions(["updateStorage"]),
 
     submit(ok) {
-      // Add a Dashboard if input field.value.length > 0
       if (this.dashboardName) {
-        //Close modal
         ok();
 
         this.updateStorage({
@@ -80,7 +76,6 @@ export default {
       }
     },
 
-    //Auto focus on open
     focusMyElement() {
       this.$refs.focusThis.focus();
     },
