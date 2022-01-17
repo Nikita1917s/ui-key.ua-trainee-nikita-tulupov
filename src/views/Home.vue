@@ -1,18 +1,22 @@
 <template>
   <div class="home">
-    <!-- <h2>Home page with CI/CD - AWS Pipeline</h2> -->
     <Dashboard />
   </div>
 </template>
 
 <script>
-import Dashboard from ".././components/Dashboard.vue";
-
+import Dashboard from "../components/Dashboard/Dashboard.vue";
+import { mapActions } from "vuex";
 export default {
   name: "Home",
-
+  methods: {
+    ...mapActions(["dashboardGet"]),
+  },
   components: {
     Dashboard,
+  },
+  async mounted() {
+    this.dashboardGet()
   },
 };
 </script>
