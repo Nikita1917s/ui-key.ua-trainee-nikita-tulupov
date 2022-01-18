@@ -9,7 +9,8 @@ const constants = {
         add: 'add',
         edit: 'edit',
         remove: 'remove',
-        move: 'move'
+        move: 'move',
+        select: 'select'
     },
     api: {
         invokeUrl: "https://1hdumcohc0.execute-api.us-east-2.amazonaws.com"

@@ -10,7 +10,7 @@
             :actionType="constants.actionType.edit"
           />
         </div>
-        <div class="editCard" title="Edit card" @click="removeFunc()">
+        <div class="editCard" title="Remove column" @click="removeFunc()">
           <b-icon icon="trash"></b-icon>
         </div>
 
