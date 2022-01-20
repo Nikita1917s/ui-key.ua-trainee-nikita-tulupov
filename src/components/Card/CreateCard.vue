@@ -59,7 +59,7 @@ export default {
           cardId: uuid_v4(),
           cardName: this.cardName,
           cardDescription: "",
-          remove: false,
+          cardImage: "",
           actionWith: constants.actionWith.card,
           actionType: constants.actionType.add,
         });

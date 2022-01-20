@@ -62,15 +62,17 @@ export default {
     },
 
     submitFunc() {
-      //Change item
-      this.updateStorage({
-        columnId: this.columnId || "",
-        columnName: this.columnName ? this.itemNameDetailed : "",
-        cardId: this.cardId || "",
-        cardName: this.cardName ? this.itemNameDetailed : "",
-        actionWith: this.actionWith,
-        actionType: this.actionType,
-      });
+      if (this.itemNameDetailed) {
+        //Change item
+        this.updateStorage({
+          columnId: this.columnId || "",
+          columnName: this.columnName ? this.itemNameDetailed : "",
+          cardId: this.cardId || "",
+          cardName: this.cardName ? this.itemNameDetailed : "",
+          actionWith: this.actionWith,
+          actionType: this.actionType,
+        });
+      }
     },
 
     setInput() {
@@ -96,6 +98,7 @@ export default {
   width: 100%;
   text-align: left;
   border-radius: 3px;
+  min-height: 40px;
 }
 .editItemInputBtn {
   width: 100%;

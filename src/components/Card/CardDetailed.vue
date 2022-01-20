@@ -1,9 +1,17 @@
 <template>
   <div class="cardDetailed" title="Open card">
-    <div @click="(modalShow = !modalShow), setInput()">
+    <div
+      class="cardDetailedInner"
+      @click="(modalShow = !modalShow), setInput()"
+    >
       <h4>{{ cardName }}</h4>
       <div>
         <b-icon icon="text-left" aria-hidden="true"></b-icon>
+      </div>
+      <div v-if="this.cardImage" class="cardImageOuter">
+        <div class="cardImageOuterBlock">
+          <img :src="this.cardImage" alt="Image attached to the Card" />
+        </div>
       </div>
     </div>
     <b-modal
@@ -60,33 +68,68 @@
               v-model="cardDescriptionDetailed"
             />
           </template>
+
+          <div v-if="this.fileLink || this.cardImg" class="cardImageInner">
+            <img
+              :src="this.fileLink || this.cardImg || this.cardImage"
+              alt="Image attached to the Card"
+            />
+          </div>
+
+          <form id="cardImageForm" class="cardImageForm">
+            <v-file-input
+              v-model="file"
+              placeholder="Select an image to upload"
+              accept="image/*"
+              id="cardImageInput"
+              @change="uploadFile"
+            />
+          </form>
         </div>
       </div>
 
       <template #modal-footer="{ cancel }">
-        <b-button size="sm" variant="danger" @click="removeFunc()">
-          Remove card
-        </b-button>
-        <b-button size="sm" variant="primary" @click="submitFunc()">
-          Save card
-        </b-button>
-        <b-button size="sm" variant="secondary" @click="cancel()"
-          >Close</b-button
-        >
+        <div class="cardAction">
+          <div class="cardActionInner">
+            <b-button size="sm" variant="danger" @click="removeFunc()">
+              Remove card
+            </b-button>
+            <b-button size="sm" variant="info" @click="removeImg()">
+              Remove image
+            </b-button>
+          </div>
+          <div class="cardActionInner">
+            <b-button size="sm" variant="primary" @click="submitFunc()">
+              Save card
+            </b-button>
+            <b-button size="sm" variant="secondary" @click="close(cancel)"
+              >Close</b-button
+            >
+          </div>
+        </div>
       </template>
     </b-modal>
   </div>
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import EditItems from "../EditItems.vue";
 import constants from "../../modules/constants";
+import { v4 as uuid_v4 } from "uuid";
 
 export default {
   name: "CardDetailed",
-  props: ["columnName", "columnId", "cardId", "cardName", "cardDescription"],
+  props: [
+    "columnName",
+    "columnId",
+    "cardId",
+    "cardName",
+    "cardDescription",
+    "cardImage",
+  ],
   components: { EditItems },
+  computed: mapGetters(["fileLink"]),
   //Data from input
   data() {
     return {
@@ -94,24 +137,29 @@ export default {
       edit: false,
       cardDescriptionDetailed: "",
       constants: constants,
+      file: null,
+      image: null,
+      cardImg: this.cardImage || "",
     };
   },
 
   methods: {
-    ...mapActions(["updateStorage"]),
+    ...mapActions(["updateStorage", "updateS3"]),
 
     editFunc() {
       this.edit = !this.edit;
     },
 
     submitFunc() {
+      this.fileLink && (this.cardImg = this.fileLink);
       this.updateStorage({
         columnId: this.columnId,
         cardId: this.cardId,
         cardName: this.cardName,
         cardDescription: this.cardDescriptionDetailed,
-        actionWith: "card",
-        actionType: "edit",
+        cardImage: this.cardImg || this.fileLink,
+        actionWith: constants.actionWith.card,
+        actionType: constants.actionType.edit,
       });
     },
 
@@ -119,8 +167,8 @@ export default {
       this.updateStorage({
         columnId: this.columnId,
         cardId: this.cardId,
-        actionWith: "card",
-        actionType: "remove",
+        actionWith: constants.actionWith.card,
+        actionType: constants.actionType.remove,
       });
     },
 
@@ -133,6 +181,37 @@ export default {
         this.$refs.focusThis.focus();
       }
     },
+
+    async uploadFile() {
+      if (this.file) {
+        const reader = new FileReader();
+        reader.readAsDataURL(this.file);
+        reader.onload = (e) => {
+          this.image = e.target.result;
+
+          const parts = this.image.split(";");
+          const data = parts[1];
+
+          this.updateS3({
+            fileId: `${uuid_v4()}--${this.file.name}`,
+            file: data,
+            actionType: constants.actionType.add,
+          });
+          this.fileLink && (this.cardImg = this.fileLink);
+        };
+      }
+    },
+
+    close(cancel) {
+      cancel();
+      this.cardImg = this.cardImage;
+      this.updateS3({});
+    },
+
+    removeImg() {
+      this.updateS3({});
+      this.cardImg = "";
+    },
   },
 };
 </script>
@@ -141,6 +220,12 @@ export default {
 .cardDetailed {
   width: 100%;
   cursor: pointer;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.cardDetailedInner {
+  width: 100%;
 }
 .cardModal h4,
 .cardModal h6 {
@@ -150,6 +235,9 @@ export default {
 .cardModalHeader h5 {
   margin: 0 10px 0 0;
   width: auto;
+}
+.cardModalHeader p {
+  width: 100%;
 }
 .cardModal {
   width: 100%;
@@ -172,5 +260,60 @@ export default {
   max-height: 40vh;
   min-height: 10vh;
   overflow: auto;
+}
+.cardImageForm {
+  min-width: 51%;
+  max-width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.cardImageInner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 50%;
+  max-width: 50%;
+  max-height: 50%;
+  object-fit: cover;
+  margin: 0 0 1rem;
+}
+.cardImageInner img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+.cardImageOuter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  object-fit: cover;
+  margin: 0 0 0.25rem;
+  flex-wrap: wrap;
+  overflow: hidden;
+}
+.cardImageOuterBlock {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  flex-direction: column;
+  overflow: hidden;
+}
+.cardImageOuter img {
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+  object-fit: contain;
+}
+.cardAction {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+.cardAction button {
+  margin: 0 10px;
 }
 </style>

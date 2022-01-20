@@ -5,7 +5,7 @@
         <div class="cardTag">
           <span></span>
         </div>
-        <div class="editCard" title="Remove card">
+        <div class="editCard" title="Edit card">
           <b-icon icon="pencil" @click="editFunc(), setInput()"></b-icon>
         </div>
         <div div class="editItem">
@@ -15,8 +15,11 @@
                 title="Press to edit"
                 placeholder="Enter a new name…"
                 v-model="itemNameDetailed"
+                @shown="focusMyElement"
                 autofocus
+                ref="focusThis"
               ></textarea>
+
               <div class="editItemInputBtn">
                 <b-button
                   size="sm"
@@ -38,6 +41,7 @@
           :columnName="columnName"
           :cardName="cardName"
           :cardDescription="cardDescription"
+          :cardImage="cardImage"
         />
       </div>
     </div>
@@ -52,7 +56,14 @@ import { mapActions } from "vuex";
 export default {
   name: "Card",
   components: { CardDetailed },
-  props: ["columnName", "columnId", "cardName", "cardDescription", "cardId"],
+  props: [
+    "columnName",
+    "columnId",
+    "cardName",
+    "cardDescription",
+    "cardId",
+    "cardImage",
+  ],
   data() {
     return {
       edit: false,
@@ -105,6 +116,7 @@ export default {
   text-decoration: none;
   border-radius: 3px;
 }
+
 .cardInner .editItem {
   margin: 0;
 }

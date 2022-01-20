@@ -10,8 +10,12 @@
 
       <div class="dashboardList">
         <ul>
-          <li>2</li>
-          <li>3</li>
+          <DashboardItem
+            v-for="dashboardItem in dashboardList"
+            :key="dashboardItem.dashboardId"
+            :dashboardId="dashboardItem.dashboardId"
+            :dashboardName="dashboardItem.dashboardName"
+          />
         </ul>
       </div>
 
@@ -38,11 +42,13 @@
 <script>
 import { v4 as uuid_v4 } from "uuid";
 import { mapActions, mapGetters } from "vuex";
+import DashboardItem from "./DashboardItem.vue";
 
 export default {
   name: "CreateDashboard",
   props: ["show", "actionWith", "actionType"],
-  computed: mapGetters(["allColumns"]),
+  computed: mapGetters(["allColumns", "dashboardList"]),
+  components: { DashboardItem },
 
   //Data from input
   data() {
