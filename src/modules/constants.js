@@ -3,7 +3,8 @@ const constants = {
         user: 'user',
         column: 'column',
         card: 'card',
-        dashboard: 'dashboard'
+        dashboard: 'dashboard',
+        file: 'file'
     },
     actionType: {
         add: 'add',

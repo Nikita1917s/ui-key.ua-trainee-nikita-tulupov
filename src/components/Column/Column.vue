@@ -26,6 +26,7 @@
             :columnName="columnName"
             :cardName="card.cardName"
             :cardDescription="card.cardDescription"
+            :cardImage="card.cardImage"
           />
         </draggable>
       </div>
@@ -81,6 +82,7 @@ export default {
   flex-direction: column;
   flex-wrap: wrap;
   min-width: 275px;
+  max-width: 275px;
 }
 .column-content {
   border: 1px solid #eaf0ff;

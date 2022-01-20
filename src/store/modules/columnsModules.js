@@ -33,7 +33,7 @@ export default {
 
                 context.state.dashboardList[dashboardItem].dashboardName = dashboardName;
                 context.commit('updateDashboardList', context.state.dashboardList);
-            })
+            });
 
             let addItem = (() => {
                 if (payload.actionWith === constants.actionWith.column) {
@@ -41,7 +41,7 @@ export default {
                     updateDb();
                 }
                 else if (card === -1 && payload.actionWith === constants.actionWith.card) {
-                    storage[column].cards = [...storage[column].cards, { cardId: payload.cardId, cardName: capitalizeLetter(payload.cardName), cardDescription: payload.cardDescription }];
+                    storage[column].cards = [...storage[column].cards, { cardId: payload.cardId, cardName: capitalizeLetter(payload.cardName), cardDescription: payload.cardDescription, cardImage: payload.cardImage }];
                     updateDb();
                 }
                 else if (payload.actionWith === constants.actionWith.dashboard) {
@@ -77,8 +77,9 @@ export default {
                     storage[column].columnName = payload.columnName;
                 }
                 else if (payload.actionWith === constants.actionWith.card) {
-                    storage[column].cards[card].cardDescription = payload.cardDescription;
                     storage[column].cards[card].cardName = payload.cardName;
+                    storage[column].cards[card].cardDescription = payload.cardDescription;
+                    storage[column].cards[card].cardImage = payload.cardImage;
                 }
                 updateDb();
             })
@@ -104,19 +105,12 @@ export default {
             });
 
             let moveItem = (() => {
-                if (payload.actionWith === constants.actionWith.column) {
-                    console.log('moved', storage);
-                }
-                else if (payload.actionWith === constants.actionWith.card) {
-                    console.log('moved', storage[column].cards);
-                }
                 updateDb();
             });
 
             let selectItem = (() => {
                 if (payload.actionWith === constants.actionWith.dashboard) {
                     let dashboard;
-                    console.log(payload.dashboardId);
 
                     axios.get(`${constants.api.invokeUrl}/dashboardGetItem/${payload.dashboardId}`)
                         .then(function (response) {
@@ -143,21 +137,26 @@ export default {
                 }
             });
 
-            if (payload.actionType === constants.actionType.add) {
-                addItem();
+            switch (payload.actionType) {
+                case constants.actionType.add:
+                    addItem();
+                    break;
+                case constants.actionType.edit:
+                    editItem();
+                    break;
+                case constants.actionType.remove:
+                    removeItem();
+                    break;
+                case constants.actionType.move:
+                    moveItem();
+                    break;
+                case constants.actionType.select:
+                    selectItem();
+                    break;
+                default:
+                    console.log(`Sorry, action type is not set ${payload.actionType}.`);
             }
-            else if (payload.actionType === constants.actionType.edit) {
-                editItem();
-            }
-            else if (payload.actionType === constants.actionType.remove) {
-                removeItem();
-            }
-            else if (payload.actionType === constants.actionType.move) {
-                moveItem();
-            }
-            else if (payload.actionType === constants.actionType.select) {
-                selectItem();
-            }
+
             context.commit('updateColumn', storage);
         },
 
@@ -178,6 +177,20 @@ export default {
                 state.commit('updateDashboardList', dashboard);
             }
         },
+
+        async updateS3(context, payload) {
+            if (typeof payload !== undefined && payload.actionType === constants.actionType.add) {
+                const params = {
+                    fileId: payload.fileId,
+                    file: payload.file,
+                };
+                let res = await axios.post(`${constants.api.invokeUrl}/filePost`, params);
+
+                context.commit('updateFileLink', res.data);
+            } else {
+                context.commit('updateFileLink', '');
+            }
+        }
     },
 
     mutations: {
@@ -190,14 +203,18 @@ export default {
         },
         updateDashboardList(state, values) {
             state.dashboardList = values;
-        }
+        },
+        updateFileLink(state, value) {
+            state.fileLink = value;
+        },
     },
 
     state: {
         dashboardId: '',
+        fileLink: '',
         dashboardName: '',
         dashboardList: [],
-        columns: [],
+        columns: []
     },
 
     getters: {
@@ -212,6 +229,9 @@ export default {
         },
         dashboardList(state) {
             return state.dashboardList;
+        },
+        fileLink(state) {
+            return state.fileLink;
         }
     }
 };

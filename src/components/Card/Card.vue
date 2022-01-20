@@ -19,6 +19,7 @@
                 autofocus
                 ref="focusThis"
               ></textarea>
+
               <div class="editItemInputBtn">
                 <b-button
                   size="sm"
@@ -40,6 +41,7 @@
           :columnName="columnName"
           :cardName="cardName"
           :cardDescription="cardDescription"
+          :cardImage="cardImage"
         />
       </div>
     </div>
@@ -54,7 +56,14 @@ import { mapActions } from "vuex";
 export default {
   name: "Card",
   components: { CardDetailed },
-  props: ["columnName", "columnId", "cardName", "cardDescription", "cardId"],
+  props: [
+    "columnName",
+    "columnId",
+    "cardName",
+    "cardDescription",
+    "cardId",
+    "cardImage",
+  ],
   data() {
     return {
       edit: false,
@@ -107,6 +116,7 @@ export default {
   text-decoration: none;
   border-radius: 3px;
 }
+
 .cardInner .editItem {
   margin: 0;
 }
