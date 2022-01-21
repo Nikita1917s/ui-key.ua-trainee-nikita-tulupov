@@ -1,22 +1,32 @@
 <template>
   <div class="home">
-    <Dashboard />
+    <template v-if="logedIn">
+      <Dashboard />
+    </template>
   </div>
 </template>
 
 <script>
 import Dashboard from "../components/Dashboard/Dashboard.vue";
-import { mapActions } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 export default {
   name: "Home",
   methods: {
-    ...mapActions(["dashboardGet"]),
+    ...mapActions(["dashboardGet", "getUser"]),
   },
   components: {
     Dashboard,
   },
+  computed: mapGetters(["logedIn"]),
   async mounted() {
-    this.dashboardGet()
+    this.dashboardGet();
+
+    if (
+      (await this.getUser()) === false ||
+      (await this.getUser()) === undefined
+    ) {
+      this.$router.push({ path: "Authorisation" });
+    }
   },
 };
 </script>
