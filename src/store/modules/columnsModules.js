@@ -133,6 +133,7 @@ export default {
                             context.state.dashboardList[dashboardItem].columns = dashboard.columns;
                             context.commit('updateDashboardList', context.state.dashboardList);
                             context.commit('updateColumn', storage);
+                            context.commit('updateFileLink', '');
                         })
                 }
             });

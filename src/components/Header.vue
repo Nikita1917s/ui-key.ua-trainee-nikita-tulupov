@@ -3,41 +3,49 @@
     <b-navbar toggleable="lg" type="dark" variant="info">
       <b-navbar-brand href="#" class="h1-text">Trello Nikita</b-navbar-brand>
 
-      <!-- Create dashboard button -->
-      <CreateDashboard
-        :actionWith="constants.actionWith.dashboard"
-        :actionType="constants.actionType.add"
-      />
+      <template v-if="logedIn">
+        <!-- Create dashboard button -->
+        <CreateDashboard
+          :actionWith="constants.actionWith.dashboard"
+          :actionType="constants.actionType.add"
+        />
 
-      <!-- Create column button -->
-      <CreateColunm v-if="dashboardId"
-        :actionWith="constants.actionWith.column"
-        :actionType="constants.actionType.add"
-      />
-      <b-navbar-brand v-else class="h2-text">Please create a Dashboard first</b-navbar-brand>
+        <!-- Create column button -->
+        <CreateColunm
+          v-if="dashboardId"
+          :actionWith="constants.actionWith.column"
+          :actionType="constants.actionType.add"
+        />
+        <b-navbar-brand v-else class="h2-text"
+          >Please create a Dashboard first</b-navbar-brand
+        >
 
-      <b-collapse id="nav-collapse" is-nav>
-        <b-navbar-nav class="ml-auto">
-          <!-- check props -->
-          <template v-if="loggedIn">
-            <b-nav-item-dropdown right>
-              <template #button-content>
-                <em class="userName-header">User Name</em>
-              </template>
+        <b-collapse id="nav-collapse" is-nav>
+          <b-navbar-nav class="ml-auto">
+            <!-- check props -->
+            <template v-if="loggedIn">
+              <b-nav-item-dropdown right>
+                <template #button-content>
+                  <em class="userName-header">{{ userName || "User Name" }}</em>
+                </template>
 
-              <b-dropdown-item
-                href="#"
-                v-on:click="$emit('signInOut', loggedIn)"
-                >Sign Out</b-dropdown-item
-              >
-            </b-nav-item-dropdown>
-          </template>
+                <b-dropdown-item
+                  href="#"
+                  @click="submitFunc"
+                  >Sign Out</b-dropdown-item
+                >
+              </b-nav-item-dropdown>
+            </template>
 
-          <b-button v-else v-on:click="$emit('signInOut', loggedIn)"
-            >Log In</b-button
-          >
-        </b-navbar-nav>
-      </b-collapse>
+            <b-button
+              variant="warning"
+              size="bg"
+              v-else
+              >Sign In</b-button
+            >
+          </b-navbar-nav>
+        </b-collapse>
+      </template>
     </b-navbar>
   </header>
 </template>
@@ -46,16 +54,24 @@
 import CreateDashboard from "./Dashboard/CreateDashboard.vue";
 import CreateColunm from "./Column/CreateColumn.vue";
 import constants from "../modules/constants";
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "Header",
   components: { CreateDashboard, CreateColunm },
-  computed: mapGetters(["dashboardId"]),
+  computed: mapGetters(["dashboardId", "userName", "logedIn"]),
   props: ["loggedIn"],
   data: () => ({
     constants: constants,
+    register: true,
   }),
+  methods: {
+    ...mapActions(["logOutUser"]),
+    submitFunc() {
+      this.logOutUser();
+      this.$router.push({ path: "Authorisation" });
+    },
+  },
 };
 </script>
 

@@ -9,6 +9,7 @@
 
 <script>
 import Header from "./components/Header.vue";
+import { mapActions } from "vuex";
 
 export default {
   name: "App",
@@ -20,6 +21,13 @@ export default {
   data: () => ({
     loggedIn: true,
   }),
+
+  methods: {
+    ...mapActions(["getUser"]),
+  },
+  mounted() {
+    this.getUser();
+  },
 };
 </script>
 

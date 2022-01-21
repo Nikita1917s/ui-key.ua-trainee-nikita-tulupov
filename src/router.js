@@ -1,26 +1,32 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import Home from './views/Home'
+import Vue from 'vue';
+import Router from 'vue-router';
+import Home from './views/Home';
+import Authorisation from './views/Authorisation';
 
-Vue.use(Router)
+Vue.use(Router);
 
 const router = new Router({
     mode: 'history',
     routes: [
         {
             path: '/',
-            redirect: '/trello-page',
-            // name: 'trello-page',
+            redirect: '/Authorisation',
             component: Home,
-            meta:{title: 'Dashboard'}
+            meta: { title: 'Dashboard' }
         },
         {
             component: Home,
             name: 'trello-page',
+            //redirect: authPage,
             path: '/trello-page',
-            meta:{title: 'Dashboard'}
+            meta: { title: 'Dashboard' }
         },
-        
+        {
+            component: Authorisation,
+            name: 'Authorisation',
+            path: '/Authorisation',
+            meta: { title: 'Authorisation' }
+        },
     ]
 })
 
