@@ -13,7 +13,7 @@ export default {
             let card = (payload.cardId) ? searchID(storage[column].cards, payload.cardId, 'cardId') : '';
             let capitalizeLetter = ((capitalizeName) => capitalizeName = capitalizeName[0].toUpperCase() + capitalizeName.slice(1));
 
-            let updateDb = (() => {
+            let updateDb = (async () => {
                 try {
                     const params = {
                         dashboardId: dashboardId,
@@ -26,10 +26,13 @@ export default {
                             dashboardId: dashboardId,
                             dashboardName: dashboardName
                         }))
-                    axios.patch(`${constants.api.invokeUrl}/dashboardUpdate`, params);
+
+                    await axios.patch(`${constants.api.invokeUrl}/dashboardUpdate`, params)
+                    getItem()
                 } catch (err) {
                     console.log(`An error has occured ${err}`);
                 }
+
 
                 context.state.dashboardList[dashboardItem].dashboardName = dashboardName;
                 context.commit('updateDashboardList', context.state.dashboardList);
@@ -108,34 +111,35 @@ export default {
                 updateDb();
             });
 
-            let selectItem = (() => {
-                if (payload.actionWith === constants.actionWith.dashboard) {
-                    let dashboard;
+            let getItem = (async () => {
 
-                    axios.get(`${constants.api.invokeUrl}/dashboardGetItem/${payload.dashboardId}`)
-                        .then(function (response) {
-                            dashboard = response.data;
-                        })
-                        .catch(function (err) {
-                            console.log(`An error has occured ${err}`);
-                        })
-                        .then(function () {
-                            storage = dashboard.columns;
+                let url = (payload.dashboardId) ? payload.dashboardId : (localStorage.getItem('dashboardId')) ? localStorage.getItem('dashboardId') : '';
+                let dashboard;
 
-                            localStorage.setItem('dashboardId', dashboard.dashboardId);
-                            let localStore = (localStorage.getItem('dashboardId')) ? localStorage.getItem('dashboardId') : '';
+                await axios.get(`${constants.api.invokeUrl}/dashboardGetItem/${url}`)
+                    .then(function (response) {
+                        dashboard = response.data;
+                    })
+                    .catch(function (err) {
+                        console.log(`An error has occured ${err}`);
+                    })
+                    .then(function () {
+                        storage = dashboard.columns;
+                        localStorage.setItem('dashboardId', dashboard.dashboardId);
+                        let localStore = (localStorage.getItem('dashboardId')) ? localStorage.getItem('dashboardId') : '';
 
-                            context.commit('updateDashboard', {
-                                dashboardId: localStore,
-                                dashboardName: dashboard.dashboardName
-                            });
+                        context.commit('updateDashboard', {
+                            dashboardId: localStore,
+                            dashboardName: dashboard.dashboardName
+                        });
 
-                            context.state.dashboardList[dashboardItem].columns = dashboard.columns;
-                            context.commit('updateDashboardList', context.state.dashboardList);
-                            context.commit('updateColumn', storage);
-                            context.commit('updateFileLink', '');
-                        })
-                }
+                        context.state.dashboardList[dashboardItem].columns = dashboard.columns;
+                        context.commit('updateDashboardList', context.state.dashboardList);
+                        context.commit('updateColumn', storage);
+                        context.commit('updateFileLink', '');
+                        return storage
+                    })
+
             });
 
             switch (payload.actionType) {
@@ -152,13 +156,11 @@ export default {
                     moveItem();
                     break;
                 case constants.actionType.select:
-                    selectItem();
+                    getItem();
                     break;
                 default:
                     console.log(`Sorry, action type is not set ${payload.actionType}.`);
             }
-
-            context.commit('updateColumn', storage);
         },
 
         async dashboardGet(state) {
@@ -184,10 +186,26 @@ export default {
                 const params = {
                     fileId: payload.fileId,
                     file: payload.file,
+                    fileType: payload.fileType
                 };
+
                 let res = await axios.post(`${constants.api.invokeUrl}/filePost`, params);
+                (res.status.toString()[0] !== '2') && (res.data = '')
 
                 context.commit('updateFileLink', res.data);
+            } else if (typeof payload !== undefined && payload.actionType === constants.actionType.remove) {
+
+                if (payload.cardImage) {
+                    let searchID = ((data, name, keyType) => data?.findIndex((elem) => elem[keyType] === name));
+                    let indexImageArr = searchID(payload.imageArr, payload.cardImage, 'Key');
+                    payload.imageArr.splice(indexImageArr, 1);
+                }
+
+                try {
+                    await axios.delete(`${constants.api.invokeUrl}/fileDelete`, { data: { imageArr: payload.imageArr } });
+                } catch (err) {
+                    console.log(`An error has occured ${err}`);
+                }
             } else {
                 context.commit('updateFileLink', '');
             }
@@ -195,7 +213,7 @@ export default {
     },
 
     mutations: {
-        updateColumn(state, storage) {
+        updateColumn(state, storage = []) {
             state.columns = storage;
         },
         updateDashboard(state, values) {
@@ -215,7 +233,7 @@ export default {
         fileLink: '',
         dashboardName: '',
         dashboardList: [],
-        columns: []
+        columns: [],
     },
 
     getters: {

@@ -15,6 +15,7 @@ const constants = {
     },
     api: {
         invokeUrl: "https://1hdumcohc0.execute-api.us-east-2.amazonaws.com"
+        //invokeUrl: "http://localhost:3000"
     },
     corgnito: {
         "REGION": "us-east-2",
