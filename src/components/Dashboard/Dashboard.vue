@@ -2,7 +2,7 @@
   <div class="dashboard">
     <template v-if="dashboardName">
       <h2>Dashboard name: {{ dashboardName }}</h2>
-      <h4>Number of columns: {{ allColumns.length }}</h4>
+      <h4>Number of columns: {{ allColumns.length || 0 }}</h4>
     </template>
 
     <template v-if="!dashboardName && !this.loading">
@@ -62,7 +62,7 @@ export default {
       this.updateStorage({
         columnId: this.columnId,
         actionWith: constants.actionWith.column,
-        actionType: constants.actionType.move
+        actionType: constants.actionType.move,
       });
     },
     loaded() {

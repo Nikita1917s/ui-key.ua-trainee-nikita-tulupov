@@ -29,20 +29,13 @@
                   <em class="userName-header">{{ userName || "User Name" }}</em>
                 </template>
 
-                <b-dropdown-item
-                  href="#"
-                  @click="submitFunc"
+                <b-dropdown-item href="#" @click="submitFunc"
                   >Sign Out</b-dropdown-item
                 >
               </b-nav-item-dropdown>
             </template>
 
-            <b-button
-              variant="warning"
-              size="bg"
-              v-else
-              >Sign In</b-button
-            >
+            <b-button variant="warning" size="bg" v-else>Sign In</b-button>
           </b-navbar-nav>
         </b-collapse>
       </template>
@@ -67,9 +60,10 @@ export default {
   }),
   methods: {
     ...mapActions(["logOutUser"]),
-    submitFunc() {
-      this.logOutUser();
+    async submitFunc() {
+      await this.logOutUser();
       this.$router.push({ path: "Authorisation" });
+      //window.location.reload()
     },
   },
 };

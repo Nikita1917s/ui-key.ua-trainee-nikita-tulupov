@@ -18,14 +18,17 @@ export default {
                 console.log(`User registration is failed ${err} ${context}`)
             }
         },
-        async logOutUser() {
+        logOutUser() {
             try {
-                await Auth.signOut();
+                Auth.signOut();
             } catch (err) {
                 console.log(`User registration is failed ${err}`)
             }
         },
         async getUser(context) {
+            let localStore = (localStorage.getItem('amplify-signin-with-hostedUI')) ? localStorage.getItem('dashboardId') : localStore;
+            console.log(localStore, 11)
+
             const session = await Auth.currentSession();
             const user = await Auth.currentAuthenticatedUser();
 

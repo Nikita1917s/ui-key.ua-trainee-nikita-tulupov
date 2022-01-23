@@ -140,6 +140,7 @@ export default {
       file: null,
       image: null,
       cardImg: this.cardImage || "",
+      imagesArr: [],
     };
   },
 
@@ -161,6 +162,14 @@ export default {
         actionWith: constants.actionWith.card,
         actionType: constants.actionType.edit,
       });
+
+      if (this.imagesArr.length > 0) {
+        this.updateS3({
+          imageArr: this.imagesArr,
+          cardImage: this.cardImage,
+          actionType: constants.actionType.remove,
+        });
+      }
     },
 
     removeFunc() {
@@ -188,15 +197,20 @@ export default {
         reader.readAsDataURL(this.file);
         reader.onload = (e) => {
           this.image = e.target.result;
-
           const parts = this.image.split(";");
           const data = parts[1];
+          const imageName = `${uuid_v4()}--${this.file.name}`;
 
-          this.updateS3({
-            fileId: `${uuid_v4()}--${this.file.name}`,
-            file: data,
-            actionType: constants.actionType.add,
-          });
+          this.imagesArr.push({ Key: `${imageName}` });
+
+          if (this.imagesArr.length > 0) {
+            this.updateS3({
+              fileId: imageName,
+              file: data,
+              fileType: this.file.type,
+              actionType: constants.actionType.add,
+            });
+          }
           this.fileLink && (this.cardImg = this.fileLink);
         };
       }
@@ -206,9 +220,16 @@ export default {
       cancel();
       this.cardImg = this.cardImage;
       this.updateS3({});
+
+      this.updateS3({
+        imageArr: this.imagesArr,
+        cardImage: this.cardImage,
+        actionType: constants.actionType.remove,
+      });
     },
 
     removeImg() {
+      this.imagesArr.push({ Key: `${this.cardImg || this.fileLink}` });
       this.updateS3({});
       this.cardImg = "";
     },
