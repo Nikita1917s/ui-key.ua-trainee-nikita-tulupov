@@ -72,16 +72,16 @@ export default {
 
     async submitFunc() {
       if (this.userName && this.userPassword) {
-        this.logInUser({
+        await this.logInUser({
           username: this.userName,
           password: this.userPassword,
         });
+        if (await this.getUser()) {
+          this.$router.push({ path: "trello-page" });
+        }
       }
-      if (await this.getUser()) {
-        this.$router.push({ path: "trello-page" });
-      }
-      //this.$router.push({ path: "trello-page" });
     },
+
     registrationForm() {
       this.register(true);
     },

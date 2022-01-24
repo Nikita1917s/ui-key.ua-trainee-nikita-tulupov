@@ -20,12 +20,8 @@ export default {
   computed: mapGetters(["logedIn"]),
   async mounted() {
     this.dashboardGet();
-console.log('res', (await this.getUser()))
-    if (
-      (await this.getUser()) === false ||
-      (await this.getUser()) === undefined
-    ) {
-      console.log('res')
+
+    if (!(await this.getUser())) {
       this.$router.push({ path: "Authorisation" });
     }
   },
