@@ -92,6 +92,7 @@ export default {
 }
 .dashboard-list .column-wrap {
   margin: 7.5px;
+  max-height: 80vh;
 }
 .dashboard-list .column-wrap:first-child {
   margin: 7.5px 7.5px 7.5px 0px;
