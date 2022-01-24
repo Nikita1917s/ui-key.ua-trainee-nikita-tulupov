@@ -98,6 +98,7 @@ export default {
 .column-header {
   display: flex;
   flex-wrap: wrap;
+   width: 100%;
 }
 .column-header-inner {
   width: 85%;
