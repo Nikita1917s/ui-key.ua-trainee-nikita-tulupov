@@ -40,6 +40,7 @@ export default {
                 context.commit('setUserName', user.username);
                 return true;
             } catch {
+                console.log('Please SignIn')
                 return false;
             }
         },
