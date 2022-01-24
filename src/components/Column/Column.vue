@@ -89,6 +89,11 @@ export default {
   background-color: #ebecf0;
   padding: 0px 8px 10px;
   border-radius: 3px;
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
 }
 .column-header {
   display: flex;
@@ -102,6 +107,6 @@ export default {
 }
 .column-cardsList {
   overflow-y: auto;
-  max-height: 52.5vh;
+  //max-height: 52.5vh;
 }
 </style>
