@@ -218,12 +218,17 @@ export default {
 
     close(cancel) {
       cancel();
-      this.cardImg = this.cardImage;
-      this.updateS3({});
+      if (this.cardImage) {
+        const parts = this.cardImg.split("/");
+        this.cardImg = parts[3];
+      } else {
+        this.cardImg = this.cardImage;
+      }
 
+      this.updateS3({});
       this.updateS3({
         imageArr: this.imagesArr,
-        cardImage: this.cardImage,
+        cardImage: this.cardImg,
         actionType: constants.actionType.remove,
       });
     },

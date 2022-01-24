@@ -202,16 +202,17 @@ export default {
                 context.commit('updateFileLink', res.data);
             } else if (typeof payload !== undefined && payload.actionType === constants.actionType.remove) {
 
-                if (payload.cardImage) {
-                    let searchID = ((data, name, keyType) => data?.findIndex((elem) => elem[keyType] === name));
-                    let indexImageArr = searchID(payload.imageArr, payload.cardImage, 'Key');
-                    payload.imageArr.splice(indexImageArr, 1);
-                }
-
-                try {
-                    await axios.delete(`${constants.api.invokeUrl}/fileDelete`, { data: { imageArr: payload.imageArr } });
-                } catch (err) {
-                    console.log(`An error has occured ${err}`);
+                if ((payload.imageArr.length > 1 && payload.cardImage || payload.imageArr.length > 0)) {
+                    if (payload.cardImage) {
+                        let searchID = ((data, name, keyType) => data?.findIndex((elem) => elem[keyType] === name));
+                        let indexImageArr = searchID(payload.imageArr, payload.cardImage, 'Key');
+                        payload.imageArr.splice(indexImageArr, 1);
+                    }
+                    try {
+                        await axios.delete(`${constants.api.invokeUrl}/fileDelete`, { data: { imageArr: payload.imageArr } });
+                    } catch (err) {
+                        console.log(`An error has occured ${err}`);
+                    }
                 }
             } else {
                 context.commit('updateFileLink', '');
