@@ -30,7 +30,7 @@
           />
         </draggable>
       </div>
-      <div>
+      <div class="cardCreation">
         <CreateCard :columnId="columnId" />
       </div>
     </div>
@@ -108,6 +108,8 @@ export default {
 }
 .column-cardsList {
   overflow-y: auto;
-  //max-height: 52.5vh;
+}
+.cardCreation{
+  width: 100%;
 }
 </style>
