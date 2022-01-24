@@ -23,13 +23,13 @@
         <b-collapse id="nav-collapse" is-nav>
           <b-navbar-nav class="ml-auto">
             <!-- check props -->
-            <template v-if="loggedIn">
+            <template v-if="logedIn">
               <b-nav-item-dropdown right>
                 <template #button-content>
                   <em class="userName-header">{{ userName || "User Name" }}</em>
                 </template>
 
-                <b-dropdown-item href="#" @click="submitFunc"
+                <b-dropdown-item href="#" @click="logOut"
                   >Sign Out</b-dropdown-item
                 >
               </b-nav-item-dropdown>
@@ -60,7 +60,7 @@ export default {
   }),
   methods: {
     ...mapActions(["logOutUser"]),
-    async submitFunc() {
+    async logOut() {
       await this.logOutUser();
       this.$router.push({ path: "Authorisation" });
       //window.location.reload()

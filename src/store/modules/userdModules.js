@@ -1,4 +1,5 @@
 import { Auth } from "aws-amplify";
+//import jwt_decode from "jwt-decode";
 
 export default {
     actions: {
@@ -10,33 +11,39 @@ export default {
                 console.log(`User registration is failed ${err} ${context}`)
             }
         },
+
         async logInUser(context, payload) {
             try {
                 const user = await Auth.signIn(payload.username, payload.password);
                 return user
             } catch (err) {
-                console.log(`User registration is failed ${err} ${context}`)
+                console.log(`User signIn is failed ${err} ${context}`)
             }
         },
-        logOutUser() {
+
+        async logOutUser(context) {
             try {
-                Auth.signOut();
+                await Auth.signOut();
+                context.commit('setUserName', '');
+                context.commit('setLoggin', false);
             } catch (err) {
-                console.log(`User registration is failed ${err}`)
+                console.log(`User can't logOut try again ${err}`)
             }
         },
+
         async getUser(context) {
-            let localStore = (localStorage.getItem('amplify-signin-with-hostedUI')) ? localStorage.getItem('dashboardId') : localStore;
-            console.log(localStore, 11)
 
-            const session = await Auth.currentSession();
-            const user = await Auth.currentAuthenticatedUser();
-
-            context.commit('setUserName', user.username);
-            context.commit('setLoggin', session.accessToken.jwtToken);
-            return session.accessToken.jwtToken
-
+            try {
+                await Auth.currentAuthenticatedUser();
+                const user = await Auth.currentAuthenticatedUser();
+                context.commit('setLoggin', true);
+                context.commit('setUserName', user.username);
+                return true;
+            } catch {
+                return false;
+            }
         },
+
         async register(context, result) {
             context.commit('setRegistration', result);
         }
@@ -55,7 +62,7 @@ export default {
     },
 
     state: {
-        logedIn: '',
+        logedIn: false,
         userName: '',
         registrationVal: ''
     },
